@@ -3,10 +3,10 @@ entries:
   gocd:
   - apiVersion: v1
     appVersion: 18.10.0
-    created: "2020-09-14T13:13:49.686652+05:30"
+    created: "2020-09-14T13:14:09.702462+05:30"
     description: GoCD is an open-source continuous delivery server to model and visualize
       complex workflows with ease.
-    digest: 492d69f7176ffa8549c4108e6814ccfa92b8fa554f619b37c0fc7e3ad5d5c3e3
+    digest: dcc027db2a930bde1e7fa17995e47a81b2821ab3b1d0981f2fc5e9d179b0f8b7
     home: https://www.gocd.org/
     icon: https://gocd.github.io/assets/images/go-icon-black-192x192.png
     keywords:
@@ -29,6 +29,6 @@ entries:
     sources:
     - https://github.com/gocd/gocd
     urls:
-    - https://github.com/gocd/helm-chart/releases/download/1.5.3/gocd-1.5.3.tgz
-    version: 1.5.3
-generated: "2020-09-14T13:13:49.685268+05:30"
+    - https://github.com/gocd/helm-chart/releases/download/1.5.4/gocd-1.5.4.tgz
+    version: 1.5.4
+generated: "2020-09-14T13:14:09.700847+05:30"
