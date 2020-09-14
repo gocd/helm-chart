@@ -40,25 +40,26 @@ $ kubectl create clusterrolebinding clusterRoleBinding \
 
 Refer the [GoCD website](https://www.gocd.org/kubernetes) for getting started with GoCD on Helm.
 
-To install the chart with the release name `gocd-app`:
+To install the chart with the release name `gocd_app`:
 
 ```bash
-$ helm repo add stable https://kubernetes-charts.storage.googleapis.com
-$ helm install --name gocd-app --namespace gocd stable/gocd
+$ helm repo add gocd https://gocd.github.io/helm-chart
+$ helm search repo gocd
+$ helm install gocd_app gocd/gocd
 ```
 
 The command deploys GoCD on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
-> **Tip**: List all releases using `helm list`
+> **Tip**: List all releases using `helm search repo -l gocd`
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `gocd-app` deployment:
 
 ```bash
-$ helm delete --purge gocd-app
+$ helm uninstall gocd-app
 ```
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+The command removes all the Kubernetes components associated with the chart and deletes the release along with the release history. If you want to keep the history use `--keep-history` flag.
 
 
 ## Configuration
@@ -486,7 +487,7 @@ GoCD agents outside of the Kubernetes cluster may connect to the GoCD server via
 # License
 
 ```plain
-Copyright 2018 ThoughtWorks, Inc.
+Copyright 2020 ThoughtWorks, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -500,5 +501,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-
-[0]: https://www.gocd.org/download/
