@@ -54,10 +54,10 @@ The command deploys GoCD on the Kubernetes cluster in the default configuration.
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `gocd-app` deployment:
+To uninstall/delete the `gocd_app` deployment:
 
 ```bash
-$ helm uninstall gocd-app
+$ helm uninstall gocd_app
 ```
 The command removes all the Kubernetes components associated with the chart and deletes the release along with the release history. If you want to keep the history use `--keep-history` flag.
 
@@ -119,7 +119,7 @@ If you are comfortable with GoCD and feel that there is no need to preconfigure 
 **Note: If the GoCD server is started with an existing config from a persistent volume, set the value of `server.shouldPreconfigure` to `false`.**
 
 ```bash
-$ helm install --namespace gocd --name gocd-app --set server.shouldPreconfigure=false stable/gocd
+$ helm install --namespace gocd --name gocd_app --set server.shouldPreconfigure=false stable/gocd
 ```
 
 We are using the `postStart` container lifecycle hook to configure the plugin settings and the elastic agent profile. On starting the container, an attempt is made to configure the GoCD server.
@@ -139,7 +139,7 @@ The above command will show the events that occurred in detail. This can be used
 The output of the preconfigure script is provided at `/godata/logs/preconfigure.log`.
 
 ```bash
-$ helm status gocd-app
+$ helm status gocd_app
 ```
 
 This command provides the information on how to access the GoCD server.
@@ -213,7 +213,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --namespace gocd --name gocd-app -f values.yaml stable/gocd
+$ helm install --namespace gocd --name gocd_app -f values.yaml stable/gocd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -243,7 +243,7 @@ Refer to the [Kubernetes blog](http://blog.kubernetes.io/2017/03/dynamic-provisi
 One can change the storage class to be used by overriding `server.persistence.storageClass` and `agent.persistence.storageClass` like below:
 
 ```bash
-$ helm install --namespace gocd --name gocd-app --set server.persistence.storageClass=STORAGE_CLASS_NAME stable/gocd
+$ helm install --namespace gocd --name gocd_app --set server.persistence.storageClass=STORAGE_CLASS_NAME stable/gocd
 ```
 
 #### Static Volumes
@@ -259,7 +259,7 @@ The value pvSelector must be specified so that the right persistence volume will
 3. Install the chart
 
 ```
-$ helm install --name gocd-app --set server.persistence.existingClaim=PVC_NAME stable/gocd
+$ helm install --name gocd_app --set server.persistence.existingClaim=PVC_NAME stable/gocd
 ```
 
 #### Additional Volumes
@@ -407,7 +407,7 @@ kubectl create clusterrolebinding clusterRoleBinding \
 The gocd service account can be associated with an existing role in the namespace that has privileges to create and delete pods. To use an existing role,
 
 ```bash
-helm install --namespace gocd --name gocd-app --set rbac.roleRef=ROLE_NAME stable/gocd
+helm install --namespace gocd --name gocd_app --set rbac.roleRef=ROLE_NAME stable/gocd
 ```
 
 #### Agent service account:
