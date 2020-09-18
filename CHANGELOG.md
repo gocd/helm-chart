@@ -1,3 +1,5 @@
+### 1.30.2
+* [5eda166](https://github.com/kubernetes/charts/commit/5eda166): Update CHANGELOG
 ### 1.30.1
 * [ab0774e](https://github.com/kubernetes/charts/commit/ab0774e): Update README.md
 ### 1.30.0
