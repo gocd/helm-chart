@@ -1,3 +1,5 @@
+### 1.30.1
+* [ab0774e](https://github.com/kubernetes/charts/commit/ab0774e): Update README.md
 ### 1.30.0
 * [e97a5d88f](https://github.com/kubernetes/charts/commit/e97a5d88f): Bump up GoCD Version to 20.7.0
 ### 1.29.0
