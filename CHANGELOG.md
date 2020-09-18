@@ -1,3 +1,5 @@
+### 1.30.3
+* [3b9e171](https://github.com/gocd/helm-chart/commit/3b9e171): Move GoCD Helm Chart readme to gocd repository
 ### 1.30.2
 * [5eda166](https://github.com/kubernetes/charts/commit/5eda166): Update CHANGELOG
 ### 1.30.1
