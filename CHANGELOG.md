@@ -1,3 +1,5 @@
+### 1.31.0
+* [44d55ea](https://github.com/kubernetes/charts/commit/44d55ea): Bump up GoCD Version to 20.8.0
 ### 1.30.3
 * [3b9e171](https://github.com/gocd/helm-chart/commit/3b9e171): Move GoCD Helm Chart readme to gocd repository
 ### 1.30.2
