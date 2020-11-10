@@ -1,3 +1,5 @@
+### 1.32.0
+* [c656595](https://github.com/kubernetes/charts/commit/c656595): Bump up GoCD Version to 20.9.0
 ### 1.31.0
 * [44d55ea](https://github.com/kubernetes/charts/commit/44d55ea): Bump up GoCD Version to 20.8.0
 ### 1.30.3
