@@ -154,6 +154,12 @@ server:
     annotations:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
+    path: /
+    extraPaths: []
+    # - path: /*
+    #   backend:
+    #     serviceName: ssl-redirect
+    #     servicePort: use-annotation
     tls:
     #  - secretName: ci-example-tls
     #    hosts:
