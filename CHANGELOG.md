@@ -1,3 +1,5 @@
+### 1.36.0
+* [8635e14](https://github.com/gocd/helm-chart/commit/8635e14): Update the gocd agent image used
 ### 1.35.0
 * [b4d695c](https://github.com/kubernetes/charts/commit/b4d695c): Bump up GoCD Version to 21.1.0
 ### 1.34.0
