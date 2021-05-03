@@ -14,7 +14,7 @@ The Official GoCD Helm Chart repository which hosts all the helm charts related 
 helm repo add gocd https://gocd.github.io/helm-chart
 ```
 
-#### Search for the GoCD Helm Chart in teh GoCD Repository
+#### Search for the GoCD Helm Chart in the GoCD Repository
 
 ```
 helm search repo gocd/gocd
