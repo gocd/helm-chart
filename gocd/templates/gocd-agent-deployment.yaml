@@ -8,6 +8,9 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
     component: agent
+    {{- with .Values.agent.labels }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
   annotations:
   {{- range $key, $value := .Values.agent.annotations.deployment }}
     {{ $key }}: {{ $value | quote }}

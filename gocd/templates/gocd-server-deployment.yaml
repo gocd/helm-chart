@@ -9,6 +9,9 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
     component: server
+    {{- with .Values.server.labels }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
   annotations:
   {{- range $key, $value := .Values.server.annotations.deployment }}
     {{ $key }}: {{ $value | quote }}
