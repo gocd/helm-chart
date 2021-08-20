@@ -9,7 +9,7 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
     component: server
-    {{- with .Values.server.labels }}
+    {{- with .Values.server.deployment.labels }}
 {{ toYaml . | indent 4 }}
     {{- end }}
   annotations:
@@ -31,6 +31,9 @@ spec:
         app: {{ template "gocd.name" . }}
         release: {{ .Release.Name | quote }}
         component: server
+        {{- with .Values.server.pod.labels }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
       annotations:
       {{- range $key, $value := .Values.server.annotations.pod }}
         {{ $key }}: {{ $value | quote }}
