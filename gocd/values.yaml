@@ -251,7 +251,7 @@ agent:
   # agent.pod.labels is the labels for the GoCD Agent Pods
   pod:
     labels: {}
-  
+
   # agent.annotations is the annotations for the GoCD Agent Deployment and Pod Spec
   annotations:
     deployment:
