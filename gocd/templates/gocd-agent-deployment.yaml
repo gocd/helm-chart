@@ -8,6 +8,9 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
     component: agent
+    {{- with .Values.agent.deployment.labels }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
   annotations:
   {{- range $key, $value := .Values.agent.annotations.deployment }}
     {{ $key }}: {{ $value | quote }}
@@ -29,6 +32,9 @@ spec:
         app: {{ template "gocd.name" . }}
         release: {{ .Release.Name | quote }}
         component: agent
+        {{- with .Values.agent.pod.labels }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
       annotations:
       {{- range $key, $value := .Values.agent.annotations.pod }}
         {{ $key }}: {{ $value | quote }}

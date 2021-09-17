@@ -22,7 +22,12 @@ server:
   # server.enabled is the toggle to run GoCD Server. Change to false for Agent Only Deployment.
   enabled: true
 
-
+  # server.deployment.labels is the labels for the GoCD Server Deployment
+  deployment:
+    labels: {}
+  # server.pod.labels is the labels for the GoCD Server Pods
+  pod:
+    labels: {}
   # server.annotations is the annotations for the GoCD Server Deployment and Pod spec.
   annotations:
     deployment:
@@ -239,6 +244,13 @@ agent:
     # if reuseTopLevelServiceAccount is false, this field specifies the name of an existing service account to be associated with gocd agents
     # If field is empty, the service account "default" will be used.
     name:
+
+  # agent.deployment.labels is the labels for the GoCD Agent Deployment
+  deployment:
+    labels: {}
+  # agent.pod.labels is the labels for the GoCD Agent Pods
+  pod:
+    labels: {}
 
   # agent.annotations is the annotations for the GoCD Agent Deployment and Pod Spec
   annotations:
