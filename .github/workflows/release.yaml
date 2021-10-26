@@ -27,7 +27,7 @@ jobs:
           ./get_helm.sh
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.0.0
+        uses: helm/chart-releaser-action@v1.2.1
         with:
           charts_dir: .
         env:
