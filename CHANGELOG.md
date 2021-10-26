@@ -1,15 +1,17 @@
+### 1.39.1
+* [e584fd9](https://github.com/gocd/helm-chart/commit/e584fd9): Bump Alpine agent image variant from 3.12 to 3.14
 ### 1.39.0
-* [57cbe84](https://github.com/kubernetes/charts/commit/57cbe84): Bump up GoCD Version to 21.3.0
+* [57cbe84](https://github.com/gocd/helm-chart/commit/57cbe84): Bump up GoCD Version to 21.3.0
 ### 1.37.0
-* [5e413e6](https://github.com/kubernetes/charts/commit/5e413e6): Bump up GoCD Version to 21.2.0
+* [5e413e6](https://github.com/gocd/helm-chart/commit/5e413e6): Bump up GoCD Version to 21.2.0
 ### 1.36.0
 * [8635e14](https://github.com/gocd/helm-chart/commit/8635e14): Update the gocd agent image used
 ### 1.35.0
-* [b4d695c](https://github.com/kubernetes/charts/commit/b4d695c): Bump up GoCD Version to 21.1.0
+* [b4d695c](https://github.com/gocd/helm-chart/commit/b4d695c): Bump up GoCD Version to 21.1.0
 ### 1.34.0
-* [6d5a7f6](https://github.com/kubernetes/charts/commit/6d5a7f6): Bump up GoCD Version to 20.10.0
+* [6d5a7f6](https://github.com/gocd/helm-chart/commit/commit/6d5a7f6): Bump up GoCD Version to 20.10.0
 ### 1.32.0
-* [c656595](https://github.com/kubernetes/charts/commit/c656595): Bump up GoCD Version to 20.9.0
+* [c656595](https://github.com/gocd/helm-chart/commit/c656595): Bump up GoCD Version to 20.9.0
 ### 1.31.0
 * [44d55ea](https://github.com/kubernetes/charts/commit/44d55ea): Bump up GoCD Version to 20.8.0
 ### 1.30.3
