@@ -25,7 +25,8 @@ jobs:
           version: v3.7.1
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.2.1
+        # Change version back for 1.2.2+ - see https://github.com/helm/chart-releaser-action/pull/83
+        uses: helm/chart-releaser-action@main
         with:
           charts_dir: .
         env:
