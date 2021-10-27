@@ -158,6 +158,7 @@ server:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     path: /
+    pathType:
     extraPaths: []
     # - path: /*
     #   backend:

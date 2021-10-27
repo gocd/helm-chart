@@ -96,6 +96,7 @@ The following tables list the configurable parameters of the GoCD chart and thei
 | `server.ingress.hosts`                     | GoCD ingress hosts records.                                                                                   | `nil`               |
 | `server.ingress.annotations`               | GoCD ingress annotations.                                                                                     | `{}`                |
 | `server.ingress.path`                      | GoCD ingress path.                                                                                            | `/`                |
+| `server.ingress.pathType`                  | GoCD ingress path type.                                                                                       | `ImplementationSpecific` |
 | `server.ingress.extraPaths`                | GoCD ingress extra paths to prepend to every host configuration.                                              | `[]`                |
 | `server.ingress.tls`                       | GoCD ingress TLS configuration.                                                                               | `[]`                |
 | `server.healthCheck.initialDelaySeconds`   | Initial delays in seconds to start the health checks. **Note**:GoCD server start up time.                     | `90`                |
