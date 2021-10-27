@@ -92,7 +92,6 @@ The following tables list the configurable parameters of the GoCD chart and thei
 | `server.service.loadBalancerSourceRanges`  | GoCD server service Load Balancer source IP ranges to whitelist                                               | `nil`               |
 | `server.service.httpPort`                  | GoCD server service HTTP port                                                                                 | `8153`              |
 | `server.service.nodeHttpPort`              | GoCD server service node HTTP port. **Note**: A random nodePort will get assigned if not specified            | `nil`               |
-| `server.service.nodeHttpsPort`             | GoCD server service node HTTPS port. **Note**: A random nodePort will get assigned if not specified           | `nil`               |
 | `server.ingress.enabled`                   | Enable/disable GoCD ingress. Allow traffic from outside the cluster via http. Do `kubectl describe ing` to get the public ip to access the gocd server.                                | `true`              |
 | `server.ingress.hosts`                     | GoCD ingress hosts records.                                                                                   | `nil`               |
 | `server.ingress.annotations`               | GoCD ingress annotations.                                                                                     | `{}`                |
