@@ -152,6 +152,9 @@ spec:
       {{- if .Values.server.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
       {{- end }}
+      {{- if .Values.server.priorityClassName }}
+      priorityClassName: {{ .Values.server.priorityClassName }}
+      {{- end }}
       restartPolicy: {{ .Values.server.restartPolicy }}
     {{- if .Values.server.nodeSelector }}
       nodeSelector:

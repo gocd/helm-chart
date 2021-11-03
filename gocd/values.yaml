@@ -56,6 +56,8 @@ server:
   # server.terminationGracePeriodSeconds is the optional duration in seconds the gocd server pod needs to terminate gracefully.
   # Note: SIGTERM is issued immediately after the pod deletion request is sent. If the pod doesn't terminate, k8s waits for terminationGracePeriodSeconds before issuing SIGKILL.
   # terminationGracePeriodSeconds: 60
+  # server.priorityClassName is an optional setting to allow the server pod to be prioritized over other pods. The value here must match a priotyClass that exists on the cluster
+  # priorityClassName: high-priority
   image:
     # server.image.repository is the GoCD Server image name
     repository: "gocd/gocd-server"
