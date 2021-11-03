@@ -1,6 +1,6 @@
 chart-dirs: .
 charts:
   - gocd
-helm-extra-args: --timeout 1800s
+helm-extra-args: --timeout 300s
 check-version-increment: true
 debug: true
