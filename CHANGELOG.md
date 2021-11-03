@@ -1,3 +1,5 @@
+### 1.39.2
+* [c12c74c](https://github.com/gocd/helm-chart/commit/c12c74c): Correct Ingress compatibility with Kubernetes 1.22 
 ### 1.39.1
 * [e584fd9](https://github.com/gocd/helm-chart/commit/e584fd9): Bump Alpine agent image variant from 3.12 to 3.14
 ### 1.39.0

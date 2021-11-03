@@ -1,10 +1,23 @@
 name: Lint and Test Charts
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   lint-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        k8s: # See https://hub.docker.com/r/kindest/node/tags
+          - v1.19.11
+          - v1.20.7
+          - v1.21.2
+          - v1.22.1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -36,6 +49,8 @@ jobs:
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.2.0
+        with:
+          node_image: kindest/node:${{ matrix.k8s }}
         # Only build a kind cluster if there are chart changes to test.
         if: steps.list-changed.outputs.changed == 'true'
 

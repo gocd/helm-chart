@@ -135,11 +135,9 @@ server:
     type: "NodePort"
     # server.service.httpPort is the GoCD Server HTTP port
     httpPort: 8153
-    # Provide the nodeHttpPort and nodeHttpsPort if you want the service to be exposed on specific ports. Without this, random node ports will be assigned.
+    # Provide the nodeHttpPort if you want the service to be exposed on specific ports. Without this, random node ports will be assigned.
     # server.service.nodeHttpPort is the GoCD Server Service Node HTTP port
     nodeHttpPort:
-    # server.service.nodeHttpPort is the GoCD Server Service Node HTTPS port
-    nodeHttpsPort:
     annotations:
       ## When using LoadBalancer service type, use the following AWS certificate from ACM
       ## https://aws.amazon.com/documentation/acm/
@@ -160,6 +158,7 @@ server:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     path: /
+    pathType:
     extraPaths: []
     # - path: /*
     #   backend:
