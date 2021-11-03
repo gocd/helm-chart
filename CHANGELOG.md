@@ -1,3 +1,5 @@
+### 1.39.3
+* [b778db9](https://github.com/gocd/helm-chart/commit/b778db9): Add ability to set server priorityClassName
 ### 1.39.2
 * [c12c74c](https://github.com/gocd/helm-chart/commit/c12c74c): Correct Ingress compatibility with Kubernetes 1.22 
 ### 1.39.1

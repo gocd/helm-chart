@@ -82,6 +82,7 @@ The following tables list the configurable parameters of the GoCD chart and thei
 | `server.image.pullPolicy`                  | Image pull policy                                                                                             | `IfNotPresent`      |
 | `server.resources`                         | GoCD server resource requests and limits                                                                      | `{}`                |
 | `server.initContainers`                    | GoCD server init containers                                                                                   | `[]`                |
+| `server.priorityClassName`                 | GoCD server priority class                                                                                    | `nil`               |
 | `server.restartPolicy`                     | GoCD server restart policy                                                                                    | `Always`            |
 | `server.nodeSelector`                      | GoCD server nodeSelector for pod labels                                                                       | `{}`                |
 | `server.affinity`                          | GoCD server affinity                                                                                          | `{}`                |
@@ -373,7 +374,7 @@ The RBAC section is for users who want to use the Kubernetes Elastic Agent Plugi
 If RBAC is enabled,
  1. A cluster role is created by default and the following privileges are provided.
 
-    <a name="cluster-role-privileges"></a>Cluser role privileges:
+    Cluster role privileges:
       - nodes: list, get
       - events: list, watch
       - namespace: list, get
@@ -427,7 +428,7 @@ Possible states:
 |------|--------------------------------------------------|
 |reuseTopLevelServiceAccount = false and name = empty|The service account 'default' will be used.|
 |reuseTopLevelServiceAccount = false and name = 'agentSA'|The 'agentSA' service account will be used. The service account needs to exist and bound with the appropriate role. |
-|reuseTopLevelServiceAccount = true| The GoCD service account will be created and used for the agents in the specified namespace. The permissions associated with the GoCD SA are defined here - [Cluster role privileges](#cluster-role-privileges).  |
+|reuseTopLevelServiceAccount = true| The GoCD service account will be created and used for the agents in the specified namespace. The permissions associated with the GoCD SA are defined above.  |
 
 # Adding plugins
 
