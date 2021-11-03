@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        k8s:
+        k8s: # See https://hub.docker.com/r/kindest/node/tags
           - v1.19.11
           - v1.20.7
           - v1.21.2
-          - v1.22.2
+          - v1.22.1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
