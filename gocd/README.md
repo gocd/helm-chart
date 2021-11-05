@@ -301,6 +301,20 @@ To mount a `ConfigMap` containing `/docker-entrypoint.d/` scripts:
           defaultMode: 0755
 ```
 
+#### Slow volume mounting / pod creation
+
+GoCD uses the volume to store all of your logs and artifacts, among other things. This can amount to a very large number 
+of small files over time, especially with larger servers and volumes. In addition to this, for security reasons GoCD runs
+with a non-standard `server.securityContext.fsGroup` identifier by default.
+
+This means that on every container start Kubernetes will ensure that the permissions of *every file* on the volume match
+the defined `fsGroup`, as documented [here](https://kubernetes.io/blog/2020/12/14/kubernetes-release-1.20-fsgroupchangepolicy-fsgrouppolicy/#allow-users-to-skip-recursive-permission-changes-on-mount).
+This can be extremely slow on large volume mounts and will be observed as your pod being stuck in `ContainerCreating`
+for a long period of time; with events on the pod related to volume mounting.
+
+From Kubernetes `1.20+` this behaviour can be changed using `server.securityContext.fsGroupChangePolicy` (and equivalent
+property for your GoCD agents if necessary), further [documented here](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods).
+
 ### Server persistence Values
 
 | Parameter                                     | Description                                             | Default              |
