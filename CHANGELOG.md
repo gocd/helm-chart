@@ -1,3 +1,5 @@
+### 1.39.4
+* [eba20d2](https://github.com/gocd/helm-chart/commit/eba20d2): Add ability to configure server and agent fsGroupChangePolicy
 ### 1.39.3
 * [b778db9](https://github.com/gocd/helm-chart/commit/b778db9): Add ability to set server priorityClassName
 ### 1.39.2
