@@ -18,6 +18,7 @@ jobs:
           - v1.20.7
           - v1.21.2
           - v1.22.1
+          - v1.23.0
     steps:
       - name: Checkout
         uses: actions/checkout@v2
