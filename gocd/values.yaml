@@ -432,7 +432,7 @@ agent:
 tests:
   # Whether or not to create test resources for use in Helm chart testing.
   # Without the resources being created the tests will not work; however the installation is cleaner.
-  enabled: true
+  enabled: false
   # A BATS image to supply test runner
   batsImage: "bats/bats:1.5.0"
   # A image containing bash, curl and busybox|coreutils for executing tests
