@@ -1,3 +1,4 @@
+{{- if and .Values.server.enabled .Values.tests.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20,3 +21,4 @@ data:
     @test "Testing GoCD application is accessible through service" {
       curl --retry 2 --retry-delay 10 --retry-max-time {{ .Values.server.healthCheck.initialDelaySeconds }} http://{{ template "gocd.fullname" . }}-server:{{ .Values.server.service.httpPort }}/go
     }
+{{- end -}}

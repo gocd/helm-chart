@@ -1,42 +1,50 @@
-apiVersion: v1
-kind: Pod
+{{- if .Values.server.enabled }}
+{{- if .Values.tests.enabled }}
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: "{{ template "gocd.fullname" . }}-test-{{ randAlphaNum 5 | lower }}"
+  name: "{{ template "gocd.fullname" . }}-test"
   labels:
     app: {{ template "gocd.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
   annotations:
-    "helm.sh/hook": test-success
+    "helm.sh/hook": test
 spec:
-  initContainers:
-    - name: "test-framework"
-      image: "dduportal/bats:0.4.0"
-      command:
-        - "bash"
-        - "-c"
-        - |
-          set -ex
-          # copy bats to tools dir
-          cp -R /usr/local/libexec/ /tools/bats/
-      volumeMounts:
-        - mountPath: /tools
-          name: tools
-  containers:
-    - name: {{ template "gocd.name" . }}-ui-test
-      image: "gocddev/gocd-helm-build:v0.1.0"
-      command: ["/tools/bats/bats", "-t", "/tests/run.sh"]
-      volumeMounts:
-        - mountPath: /tests
-          name: tests
-          readOnly: true
-        - mountPath: /tools
-          name: tools
-  volumes:
-    - name: tests
-      configMap:
-        name: {{ template "gocd.fullname" . }}-tests
-    - name: tools
-      emptyDir: {}
-  restartPolicy: Never
+  activeDeadlineSeconds: 150
+  ttlSecondsAfterFinished: 180
+  template:
+    spec:
+      initContainers:
+        - name: "test-framework"
+          image: {{ .Values.tests.batsImage }}
+          command:
+            - "bash"
+            - "-c"
+            - |
+              set -ex
+              # copy bats to tools dir
+              cp -R /opt/bats/ /tools/bats/
+          volumeMounts:
+            - mountPath: /tools
+              name: tools
+      containers:
+        - name: {{ template "gocd.name" . }}-ui-test
+          image: {{ .Values.tests.curlImage }}
+          command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+          volumeMounts:
+            - mountPath: /tests
+              name: tests
+              readOnly: true
+            - mountPath: /tools
+              name: tools
+      volumes:
+        - name: tests
+          configMap:
+            name: {{ template "gocd.fullname" . }}-tests
+        - name: tools
+          emptyDir: {}
+      restartPolicy: Never
+{{- end -}}
+{{- end -}}
