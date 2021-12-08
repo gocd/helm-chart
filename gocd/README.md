@@ -446,6 +446,17 @@ Possible states:
 |reuseTopLevelServiceAccount = false and name = 'agentSA'|The 'agentSA' service account will be used. The service account needs to exist and bound with the appropriate role. |
 |reuseTopLevelServiceAccount = true| The GoCD service account will be created and used for the agents in the specified namespace. The permissions associated with the GoCD SA are defined above.  |
 
+### Testing
+
+A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in this chart. Resources required to use this are not created by default and must e enabled as below.
+
+| Parameter         | Description                                                                                               | Default                                          |
+|-------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| `tests.enabled`   | Enable creation of resoures to support Helm chart tests with `helm test`.                                 | `false`                                          |
+| `tests.batsImage` | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.5.0`                                |
+| `tests.curlImage` | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/patrickdappollonio/alpine-utils:latest` |
+
+
 # Adding plugins
 
 - Add the .jar file link from the releases section in the plugin's repo to the env.extraEnvVars section as a new environment variable.
@@ -506,7 +517,7 @@ GoCD agents outside of the Kubernetes cluster may connect to the GoCD server via
 # License
 
 ```plain
-Copyright 2020 ThoughtWorks, Inc.
+Copyright 2021 ThoughtWorks, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,3 +1,5 @@
+### 1.39.5
+* [7eeb56c4](https://github.com/gocd/helm-chart/commit/7eeb56c4): Reworking chart testing to use recent images and avoid creating resources by default
 ### 1.39.4
 * [eba20d2](https://github.com/gocd/helm-chart/commit/eba20d2): Add ability to configure server and agent fsGroupChangePolicy
 ### 1.39.3
