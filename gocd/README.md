@@ -448,11 +448,11 @@ Possible states:
 
 ### Testing
 
-A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in this chart. Resources required to use this are not created by default and must e enabled as below.
+A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in this chart. To avoid creating misleading or unused resources in your clusters, the resources required to use `helm test` are not created by default in chart version `1.39.6+` and must be enabled as below.
 
 | Parameter         | Description                                                                                               | Default                                          |
 |-------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
-| `tests.enabled`   | Enable creation of resoures to support Helm chart tests with `helm test`.                                 | `false`                                          |
+| `tests.enabled`   | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                                          |
 | `tests.batsImage` | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.5.0`                                |
 | `tests.curlImage` | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/patrickdappollonio/alpine-utils:latest` |
 
