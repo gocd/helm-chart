@@ -17,6 +17,8 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   # If create is false and a name is not specified, the default service account is used for the cluster role binding.
   name:
+  annotations:
+    # eks.amazonaws.com/role-arn: arn:aws:iam::123456789000:role/iam-role-name-here
 
 server:
   # server.enabled is the toggle to run GoCD Server. Change to false for Agent Only Deployment.
