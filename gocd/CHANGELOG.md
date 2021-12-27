@@ -1,3 +1,5 @@
+### 1.39.7
+* [77fbc5d0](https://github.com/gocd/helm-chart/commit/77fbc5d0): Add ability to annotate service accounts (thanks to @nalbam)
 ### 1.39.6
 * [d85dbb31](https://github.com/gocd/helm-chart/commit/d85dbb31): Disable chart test resource creation by default
 ### 1.39.5
