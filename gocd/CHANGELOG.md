@@ -1,13 +1,15 @@
+### 1.39.7
+* [77fbc5d0](https://github.com/gocd/helm-chart/commit/77fbc5d0): Add ability to annotate service accounts (thanks to @nalbam)
 ### 1.39.6
-* [d85dbb31](https://github.com/gocd/helm-chart/commit/d85dbb31): Disable chart test resource creation by default
+* [d85dbb31](https://github.com/gocd/helm-chart/commit/d85dbb31): Disable chart test resource creation by default (thanks to @chadlwilson)
 ### 1.39.5
-* [7eeb56c4](https://github.com/gocd/helm-chart/commit/7eeb56c4): Reworking chart testing to use recent images and avoid creating resources by default
+* [7eeb56c4](https://github.com/gocd/helm-chart/commit/7eeb56c4): Reworking chart testing to use recent images and avoid creating resources by default (thanks to @chadlwilson)
 ### 1.39.4
-* [eba20d2](https://github.com/gocd/helm-chart/commit/eba20d2): Add ability to configure server and agent fsGroupChangePolicy
+* [eba20d2](https://github.com/gocd/helm-chart/commit/eba20d2): Add ability to configure server and agent fsGroupChangePolicy (thanks to @chadlwilson)
 ### 1.39.3
-* [b778db9](https://github.com/gocd/helm-chart/commit/b778db9): Add ability to set server priorityClassName
+* [b778db9](https://github.com/gocd/helm-chart/commit/b778db9): Add ability to set server priorityClassName (thanks to @jdmulloy)
 ### 1.39.2
-* [c12c74c](https://github.com/gocd/helm-chart/commit/c12c74c): Correct Ingress compatibility with Kubernetes 1.22 
+* [c12c74c](https://github.com/gocd/helm-chart/commit/c12c74c): Correct Ingress compatibility with Kubernetes 1.22 (thanks to @chadlwilson)
 ### 1.39.1
 * [e584fd9](https://github.com/gocd/helm-chart/commit/e584fd9): Bump Alpine agent image variant from 3.12 to 3.14
 ### 1.39.0
