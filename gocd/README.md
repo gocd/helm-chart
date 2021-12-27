@@ -12,29 +12,10 @@ To quickly build your first pipeline while learning key GoCD concepts, visit the
 
 ## Prerequisites
 
+- Helm 3 (Helm 2 _may_ work, but considered deprecated and may break)
 - Kubernetes 1.14+ with Beta APIs enabled
 - PV provisioner support in the underlying infrastructure
 - LoadBalancer support or Ingress Controller
-- Ensure that the service account used for starting tiller has enough permissions to create a role.
-
-## Setup
-
-Because of a [known issue](https://github.com/kubernetes/helm/issues/2224) while creating a role, in order for the `helm install` to work, please ensure to do the following:
-
-- On minikube
-
-```bash
-$ minikube start --bootstrapper kubeadm
-```
-
-- On GKE, if tiller's in the kube-system namespace
-
-```bash
-
-$ kubectl create clusterrolebinding clusterRoleBinding \
-  --clusterrole=cluster-admin \
-  --serviceaccount=kube-system:default
-```
 
 ## Installing the Chart
 
@@ -52,6 +33,10 @@ The command deploys GoCD on the Kubernetes cluster in the default configuration.
 
 > **Tip**: List all releases using `helm search repo -l gocd`
 
+## Changelog
+
+Please see [CHANGELOG.md](./CHANGELOG.md).
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `gocd_app` deployment:
@@ -68,50 +53,50 @@ The following tables list the configurable parameters of the GoCD chart and thei
 
 ### GoCD Server
 
-| Parameter                                   | Description                                                                                                                                         | Default                  |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `server.enabled`                            | Enable GoCD Server. Supported values are `true`, `false`. When enabled, the GoCD server deployment is done on helm install.                         | `true`                   |
-| `server.annotations.deployment`             | GoCD server Deployment annotations.                                                                                                                 | `{}`                     |
-| `server.annotations.pod       `             | GoCD server Pod annotations.                                                                                                                        | `{}`                     |
-| `server.shouldPreconfigure`                 | Preconfigure GoCD Server to have a default elastic agent profile and Kubernetes elastic agent plugin settings. Supported values are `true`, `false`.| `true`                   |
-| `server.preconfigureCommand`                | Preconfigure GOCD Server with a custom command (shell,python, etc ...). Supported value is a list.                                                  | `["/bin/bash", "/preconfigure_server.sh"]`|
-| `server.preStop`                            | Perform cleanup and backup before stopping the gocd server. Supported value is a list.                                                              | `nil`                    |
-| `server.terminationGracePeriodSeconds`      | Optional duration in seconds the gocd server pod needs to terminate gracefully.                                                                     | `nil`                    |
-| `server.image.repository`                   | GoCD server image                                                                                                                                   | `gocd/gocd-server`       |
-| `server.image.tag`                          | GoCD server image tag                                                                                                                               | `.Chart.appVersion`      |
-| `server.image.pullPolicy`                   | Image pull policy                                                                                                                                   | `IfNotPresent`           |
-| `server.resources`                          | GoCD server resource requests and limits                                                                                                            | `{}`                     |
-| `server.initContainers`                     | GoCD server init containers                                                                                                                         | `[]`                     |
-| `server.priorityClassName`                  | GoCD server priority class                                                                                                                          | `nil`                    |
-| `server.restartPolicy`                      | GoCD server restart policy                                                                                                                          | `Always`                 |
-| `server.nodeSelector`                       | GoCD server nodeSelector for pod labels                                                                                                             | `{}`                     |
-| `server.affinity`                           | GoCD server affinity                                                                                                                                | `{}`                     |
-| `server.tolerations`                        | GoCD server tolerations                                                                                                                             | `{}`                     |
-| `server.env.goServerJvmOpts`                | GoCD Server JVM arguments                                                                                                                           | `nil`                    |
-| `server.env.extraEnvVars`                   | GoCD Server extra Environment variables                                                                                                             | `nil`                    |
-| `server.service.type`                       | Type of GoCD server Kubernetes service                                                                                                              | `NodePort`               |
-| `server.service.loadBalancerSourceRanges`   | GoCD server service Load Balancer source IP ranges to whitelist                                                                                     | `nil`                    |
-| `server.service.httpPort`                   | GoCD server service HTTP port                                                                                                                       | `8153`                   |
-| `server.service.nodeHttpPort`               | GoCD server service node HTTP port. **Note**: A random nodePort will get assigned if not specified                                                  | `nil`                    |
-| `server.ingress.enabled`                    | Enable/disable GoCD ingress. Allow traffic from outside the cluster via http. Do `kubectl describe ing` to get the public ip for access             | `true`                   |
-| `server.ingress.hosts`                      | GoCD ingress hosts records.                                                                                                                         | `nil`                    |
-| `server.ingress.annotations`                | GoCD ingress annotations.                                                                                                                           | `{}`                     |
-| `server.ingress.path`                       | GoCD ingress path.                                                                                                                                  | `/`                      |
-| `server.ingress.pathType`                   | GoCD ingress path type.                                                                                                                             | `ImplementationSpecific` |
-| `server.ingress.extraPaths`                 | GoCD ingress extra paths to prepend to every host configuration.                                                                                    | `[]`                     |
-| `server.ingress.tls`                        | GoCD ingress TLS configuration.                                                                                                                     | `[]`                     |
-| `server.healthCheck.initialDelaySeconds`    | Initial delays in seconds to start the health checks. **Note**:GoCD server start up time.                                                           | `90`                     |
-| `server.healthCheck.periodSeconds`          | GoCD server health check interval period.                                                                                                           | `15`                     |
-| `server.healthCheck.failureThreshold`       | Number of unsuccessful attempts made to the GoCD server health check endpoint before restarting.                                                    | `10`                     |
-| `server.hostAliases`                        | Aliases for IPs in /etc/hosts                                                                                                                       | `[]`                     |
-| `server.security.ssh.enabled`               | Enable the use of SSH keys for GoCD server                                                                                                          | `false`                  |
-| `server.security.ssh.secretName`            | The name of the secret holding the SSH keys                                                                                                         | `gocd-server-ssh`        |
-| `server.security.ssh.defaultMode`           | Permissions of files in ~/.ssh directory                                                                                                            | `256`                    |
-| `server.securityContext.runAsUser`          | The container user for all the GoCD server pods.                                                                                                    | `1000`                   |
-| `server.securityContext.runAsGroup`         | The container group for all the GoCD server pods.                                                                                                   | `0`                      |
-| `server.securityContext.fsGroup`            | The container supplementary group for all the GoCD server pods.                                                                                     | `0`                      |
-| `server.securityContext.fsGroupChangePolicy`| The policy for checking fsGroup permissions on GoCD server pods (K8S 1.20+)                                                                         | `Always`                 |
-| `server.sidecarContainers`                  | Sidecar containers to run alongside GoCD server.                                                                                                    | `[]`                     |
+| Parameter                                    | Description                                                                                                                                          | Default                                    |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
+| `server.enabled`                             | Enable GoCD Server. Supported values are `true`, `false`. When enabled, the GoCD server deployment is done on helm install.                          | `true`                                     |
+| `server.annotations.deployment`              | GoCD server Deployment annotations.                                                                                                                  | `{}`                                       |
+| `server.annotations.pod       `              | GoCD server Pod annotations.                                                                                                                         | `{}`                                       |
+| `server.shouldPreconfigure`                  | Preconfigure GoCD Server to have a default elastic agent profile and Kubernetes elastic agent plugin settings. Supported values are `true`, `false`. | `true`                                     |
+| `server.preconfigureCommand`                 | Preconfigure GOCD Server with a custom command (shell,python, etc ...). Supported value is a list.                                                   | `["/bin/bash", "/preconfigure_server.sh"]` |
+| `server.preStop`                             | Perform cleanup and backup before stopping the gocd server. Supported value is a list.                                                               | `nil`                                      |
+| `server.terminationGracePeriodSeconds`       | Optional duration in seconds the gocd server pod needs to terminate gracefully.                                                                      | `nil`                                      |
+| `server.image.repository`                    | GoCD server image                                                                                                                                    | `gocd/gocd-server`                         |
+| `server.image.tag`                           | GoCD server image tag                                                                                                                                | `.Chart.appVersion`                        |
+| `server.image.pullPolicy`                    | Image pull policy                                                                                                                                    | `IfNotPresent`                             |
+| `server.resources`                           | GoCD server resource requests and limits                                                                                                             | `{}`                                       |
+| `server.initContainers`                      | GoCD server init containers                                                                                                                          | `[]`                                       |
+| `server.priorityClassName`                   | GoCD server priority class                                                                                                                           | `nil`                                      |
+| `server.restartPolicy`                       | GoCD server restart policy                                                                                                                           | `Always`                                   |
+| `server.nodeSelector`                        | GoCD server nodeSelector for pod labels                                                                                                              | `{}`                                       |
+| `server.affinity`                            | GoCD server affinity                                                                                                                                 | `{}`                                       |
+| `server.tolerations`                         | GoCD server tolerations                                                                                                                              | `{}`                                       |
+| `server.env.goServerJvmOpts`                 | GoCD Server JVM arguments                                                                                                                            | `nil`                                      |
+| `server.env.extraEnvVars`                    | GoCD Server extra Environment variables                                                                                                              | `nil`                                      |
+| `server.service.type`                        | Type of GoCD server Kubernetes service                                                                                                               | `NodePort`                                 |
+| `server.service.loadBalancerSourceRanges`    | GoCD server service Load Balancer source IP ranges to whitelist                                                                                      | `nil`                                      |
+| `server.service.httpPort`                    | GoCD server service HTTP port                                                                                                                        | `8153`                                     |
+| `server.service.nodeHttpPort`                | GoCD server service node HTTP port. **Note**: A random nodePort will get assigned if not specified                                                   | `nil`                                      |
+| `server.ingress.enabled`                     | Enable/disable GoCD ingress. Allow traffic from outside the cluster via http. Do `kubectl describe ing` to get the public ip for access              | `true`                                     |
+| `server.ingress.hosts`                       | GoCD ingress hosts records.                                                                                                                          | `nil`                                      |
+| `server.ingress.annotations`                 | GoCD ingress annotations.                                                                                                                            | `{}`                                       |
+| `server.ingress.path`                        | GoCD ingress path.                                                                                                                                   | `/`                                        |
+| `server.ingress.pathType`                    | GoCD ingress path type.                                                                                                                              | `ImplementationSpecific`                   |
+| `server.ingress.extraPaths`                  | GoCD ingress extra paths to prepend to every host configuration.                                                                                     | `[]`                                       |
+| `server.ingress.tls`                         | GoCD ingress TLS configuration.                                                                                                                      | `[]`                                       |
+| `server.healthCheck.initialDelaySeconds`     | Initial delays in seconds to start the health checks. **Note**:GoCD server start up time.                                                            | `90`                                       |
+| `server.healthCheck.periodSeconds`           | GoCD server health check interval period.                                                                                                            | `15`                                       |
+| `server.healthCheck.failureThreshold`        | Number of unsuccessful attempts made to the GoCD server health check endpoint before restarting.                                                     | `10`                                       |
+| `server.hostAliases`                         | Aliases for IPs in /etc/hosts                                                                                                                        | `[]`                                       |
+| `server.security.ssh.enabled`                | Enable the use of SSH keys for GoCD server                                                                                                           | `false`                                    |
+| `server.security.ssh.secretName`             | The name of the secret holding the SSH keys                                                                                                          | `gocd-server-ssh`                          |
+| `server.security.ssh.defaultMode`            | Permissions of files in ~/.ssh directory                                                                                                             | `256`                                      |
+| `server.securityContext.runAsUser`           | The container user for all the GoCD server pods.                                                                                                     | `1000`                                     |
+| `server.securityContext.runAsGroup`          | The container group for all the GoCD server pods.                                                                                                    | `0`                                        |
+| `server.securityContext.fsGroup`             | The container supplementary group for all the GoCD server pods.                                                                                      | `0`                                        |
+| `server.securityContext.fsGroupChangePolicy` | The policy for checking fsGroup permissions on GoCD server pods (K8S 1.20+)                                                                          | `Always`                                   |
+| `server.sidecarContainers`                   | Sidecar containers to run alongside GoCD server.                                                                                                     | `[]`                                       |
 
 #### Preconfiguring the GoCD Server
 
@@ -172,46 +157,46 @@ $ kubectl create secret generic gocd-server-ssh \
 
  *Note: This is only for static gocd agents brought up in the cluster via the helm chart. The elastic agent pods need to be separately configured using [elastic agent profiles](https://docs.gocd.org/current/configuration/elastic_agents.html#elastic-agent-profile)*
 
-| Parameter                                  | Description                                                                                                                                                                      | Default                      |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `agent.annotations.deployment`             | GoCD Agent Deployment annotations.                                                                                                                                               | `{}`                         |
-| `agent.annotations.pod       `             | GoCD Agent Pod annotations.                                                                                                                                                      | `{}`                         |
-| `agent.replicaCount`                       | GoCD Agent replicas Count. By default, no agents are provided.                                                                                                                   | `0`                          |
-| `agent.preStop        `                    | Perform cleanup and backup before stopping the gocd server. Supported value is a list.                                                                                           | `nil`                        |
-| `agent.postStart`                          | Commands to run after agent startup.                                                                                                                                             | `nil`                        |
-| `agent.terminationGracePeriodSeconds`      | Optional duration in seconds the gocd agent pods need to terminate gracefully.                                                                                                   | `nil`                        |
-| `agent.deployStrategy`                     | GoCD Agent [deployment strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).                                                                | `{}`                         |
-| `agent.image.repository`                   | GoCD agent image                                                                                                                                                                 | `gocd/gocd-agent-alpine-3.14`|
-| `agent.image.tag`                          | GoCD agent image tag                                                                                                                                                             | `.Chart.appVersion`          |
-| `agent.image.pullPolicy`                   | Image pull policy                                                                                                                                                                | `IfNotPresent`               |
-| `agent.resources`                          | GoCD agent resource requests and limits                                                                                                                                          | `{}`                         |
-| `agent.initContainers`                     | GoCD agent init containers                                                                                                                                                       | `[]`                         |
-| `agent.restartPolicy`                      | GoCD agent restart policy                                                                                                                                                        | `Always`                     |
-| `agent.nodeSelector`                       | GoCD agent nodeSelector for pod labels                                                                                                                                           | `{}`                         |
-| `agent.affinity`                           | GoCD agent affinity                                                                                                                                                              | `{}`                         |
-| `agent.tolerations`                        | GoCD agent tolerations                                                                                                                                                           | `{}`                         |
-| `agent.env.goServerUrl`                    | GoCD Server Url. If nil, discovers the GoCD server service if its available on the Kubernetes cluster                                                                            | `nil`                        |
-| `agent.env.agentAutoRegisterKey`           | GoCD Agent autoregister key                                                                                                                                                      | `nil`                        |
-| `agent.env.agentAutoRegisterResources`     | Comma separated list of GoCD Agent resources                                                                                                                                     | `nil`                        |
-| `agent.env.agentAutoRegisterEnvironments`  | Comma separated list of GoCD Agent environments                                                                                                                                  | `nil`                        |
-| `agent.env.agentAutoRegisterHostname`      | GoCD Agent hostname                                                                                                                                                              | `nil`                        |
-| `agent.env.goAgentBootstrapperArgs`        | GoCD Agent Bootstrapper Args. It can be used to [Configure end-to-end transport security](https://docs.gocd.org/current/installation/ssl_tls/end_to_end_transport_security.html) | `nil`                        |
-| `agent.env.goAgentBootstrapperJvmArgs`     | GoCD Agent Bootstrapper JVM Args.                                                                                                                                                | `nil`                        |
-| `agent.env.goAgentJvmOpts`                 | GoCD Agent JVM arguments                                                                                                                                                         | `nil`                        |
-| `agent.env.extraEnvVars`                   | GoCD Agent extra Environment variables                                                                                                                                           | `nil`                        |
-| `agent.privileged`                         | Run container in privileged mode (needed for DinD, Docker-in-Docker agents)                                                                                                      | `false`                      |
-| `agent.healthCheck.enabled`                | Enable use of GoCD agent health checks.                                                                                                                                          | `false`                      |
-| `agent.healthCheck.initialDelaySeconds`    | GoCD agent start up time.                                                                                                                                                        | `60`                         |
-| `agent.healthCheck.periodSeconds`          | GoCD agent health check interval period.                                                                                                                                         | `60`                         |
-| `agent.healthCheck.failureThreshold`       | GoCD agent health check failure threshold. Number of unsuccessful attempts made to the GoCD server health check endpoint before restarting.                                      | `60`                         |
-| `agent.hostAliases`                        | Aliases for IPs in /etc/hosts                                                                                                                                                    | `[]`                         |
-| `agent.security.ssh.enabled`               | Enable the use of SSH keys for GoCD agent                                                                                                                                        | `false`                      |
-| `agent.security.ssh.secretName`            | The name of the secret holding the SSH keys                                                                                                                                      | `gocd-agent-ssh`             |
-| `agent.security.ssh.defaultMode`           | Permissions of files in ~/.ssh directory                                                                                                                                         | `256`                        |
-| `agent.securityContext.runAsUser`          | The container user for all the GoCD agent pods.                                                                                                                                  | `1000`                       |
-| `agent.securityContext.runAsGroup`         | The container group for all the GoCD agent pods.                                                                                                                                 | `0`                          |
-| `agent.securityContext.fsGroup`            | The container supplementary group for all the GoCD agent pods.                                                                                                                   | `0`                          |
-| `agent.securityContext.fsGroupChangePolicy`| The policy for checking fsGroup permissions on GoCD agent pods (K8S 1.20+)                                                                                                       | `Always`                     |
+| Parameter                                   | Description                                                                                                                                                                      | Default                       |
+|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
+| `agent.annotations.deployment`              | GoCD Agent Deployment annotations.                                                                                                                                               | `{}`                          |
+| `agent.annotations.pod       `              | GoCD Agent Pod annotations.                                                                                                                                                      | `{}`                          |
+| `agent.replicaCount`                        | GoCD Agent replicas Count. By default, no agents are provided.                                                                                                                   | `0`                           |
+| `agent.preStop        `                     | Perform cleanup and backup before stopping the gocd server. Supported value is a list.                                                                                           | `nil`                         |
+| `agent.postStart`                           | Commands to run after agent startup.                                                                                                                                             | `nil`                         |
+| `agent.terminationGracePeriodSeconds`       | Optional duration in seconds the gocd agent pods need to terminate gracefully.                                                                                                   | `nil`                         |
+| `agent.deployStrategy`                      | GoCD Agent [deployment strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).                                                                | `{}`                          |
+| `agent.image.repository`                    | GoCD agent image                                                                                                                                                                 | `gocd/gocd-agent-alpine-3.14` |
+| `agent.image.tag`                           | GoCD agent image tag                                                                                                                                                             | `.Chart.appVersion`           |
+| `agent.image.pullPolicy`                    | Image pull policy                                                                                                                                                                | `IfNotPresent`                |
+| `agent.resources`                           | GoCD agent resource requests and limits                                                                                                                                          | `{}`                          |
+| `agent.initContainers`                      | GoCD agent init containers                                                                                                                                                       | `[]`                          |
+| `agent.restartPolicy`                       | GoCD agent restart policy                                                                                                                                                        | `Always`                      |
+| `agent.nodeSelector`                        | GoCD agent nodeSelector for pod labels                                                                                                                                           | `{}`                          |
+| `agent.affinity`                            | GoCD agent affinity                                                                                                                                                              | `{}`                          |
+| `agent.tolerations`                         | GoCD agent tolerations                                                                                                                                                           | `{}`                          |
+| `agent.env.goServerUrl`                     | GoCD Server Url. If nil, discovers the GoCD server service if its available on the Kubernetes cluster                                                                            | `nil`                         |
+| `agent.env.agentAutoRegisterKey`            | GoCD Agent autoregister key                                                                                                                                                      | `nil`                         |
+| `agent.env.agentAutoRegisterResources`      | Comma separated list of GoCD Agent resources                                                                                                                                     | `nil`                         |
+| `agent.env.agentAutoRegisterEnvironments`   | Comma separated list of GoCD Agent environments                                                                                                                                  | `nil`                         |
+| `agent.env.agentAutoRegisterHostname`       | GoCD Agent hostname                                                                                                                                                              | `nil`                         |
+| `agent.env.goAgentBootstrapperArgs`         | GoCD Agent Bootstrapper Args. It can be used to [Configure end-to-end transport security](https://docs.gocd.org/current/installation/ssl_tls/end_to_end_transport_security.html) | `nil`                         |
+| `agent.env.goAgentBootstrapperJvmArgs`      | GoCD Agent Bootstrapper JVM Args.                                                                                                                                                | `nil`                         |
+| `agent.env.goAgentJvmOpts`                  | GoCD Agent JVM arguments                                                                                                                                                         | `nil`                         |
+| `agent.env.extraEnvVars`                    | GoCD Agent extra Environment variables                                                                                                                                           | `nil`                         |
+| `agent.privileged`                          | Run container in privileged mode (needed for DinD, Docker-in-Docker agents)                                                                                                      | `false`                       |
+| `agent.healthCheck.enabled`                 | Enable use of GoCD agent health checks.                                                                                                                                          | `false`                       |
+| `agent.healthCheck.initialDelaySeconds`     | GoCD agent start up time.                                                                                                                                                        | `60`                          |
+| `agent.healthCheck.periodSeconds`           | GoCD agent health check interval period.                                                                                                                                         | `60`                          |
+| `agent.healthCheck.failureThreshold`        | GoCD agent health check failure threshold. Number of unsuccessful attempts made to the GoCD server health check endpoint before restarting.                                      | `60`                          |
+| `agent.hostAliases`                         | Aliases for IPs in /etc/hosts                                                                                                                                                    | `[]`                          |
+| `agent.security.ssh.enabled`                | Enable the use of SSH keys for GoCD agent                                                                                                                                        | `false`                       |
+| `agent.security.ssh.secretName`             | The name of the secret holding the SSH keys                                                                                                                                      | `gocd-agent-ssh`              |
+| `agent.security.ssh.defaultMode`            | Permissions of files in ~/.ssh directory                                                                                                                                         | `256`                         |
+| `agent.securityContext.runAsUser`           | The container user for all the GoCD agent pods.                                                                                                                                  | `1000`                        |
+| `agent.securityContext.runAsGroup`          | The container group for all the GoCD agent pods.                                                                                                                                 | `0`                           |
+| `agent.securityContext.fsGroup`             | The container supplementary group for all the GoCD agent pods.                                                                                                                   | `0`                           |
+| `agent.securityContext.fsGroupChangePolicy` | The policy for checking fsGroup permissions on GoCD agent pods (K8S 1.20+)                                                                                                       | `Always`                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
@@ -317,34 +302,34 @@ property for your GoCD agents if necessary), further [documented here](https://k
 
 ### Server persistence Values
 
-| Parameter                                     | Description                                             | Default              |
-| --------------------------------------------- | ------------------------------------------------------- | -------------------- |
-| `server.persistence.enabled`                  | Enable the use of a GoCD server PVC                     | `true`               |
-| `server.persistence.accessMode`               | The PVC access mode                                     | `ReadWriteOnce`      |
-| `server.persistence.size`                     | The size of the PVC                                     | `2Gi`                |
-| `server.persistence.storageClass`             | The PVC storage class name                              | `nil`                |
-| `server.persistence.pvSelector`               | The godata Persistence Volume Selectors                 | `nil`                |
-| `server.persistence.name.dockerEntryPoint`    | The Persitence Volume to mount at /docker-entrypoint.d/ | `goserver-vol`       |
-| `server.persistence.subpath.godata`           | The /godata path on Persistence Volume                  | `godata`             |
-| `server.persistence.subpath.homego`           | The /home/go path on Persistence Volume                 | `homego`             |
-| `server.persistence.subpath.dockerEntryPoint` | The /docker-entrypoint.d path on Persistence Volume     | `scripts`            |
-| `server.persistence.extraVolumes`             | Additional server volumes                               | `[]`                 |
-| `server.persistence.extraVolumeMounts`        | Additional server volumeMounts                          | `[]`                 |
+| Parameter                                     | Description                                             | Default         |
+|-----------------------------------------------|---------------------------------------------------------|-----------------|
+| `server.persistence.enabled`                  | Enable the use of a GoCD server PVC                     | `true`          |
+| `server.persistence.accessMode`               | The PVC access mode                                     | `ReadWriteOnce` |
+| `server.persistence.size`                     | The size of the PVC                                     | `2Gi`           |
+| `server.persistence.storageClass`             | The PVC storage class name                              | `nil`           |
+| `server.persistence.pvSelector`               | The godata Persistence Volume Selectors                 | `nil`           |
+| `server.persistence.name.dockerEntryPoint`    | The Persitence Volume to mount at /docker-entrypoint.d/ | `goserver-vol`  |
+| `server.persistence.subpath.godata`           | The /godata path on Persistence Volume                  | `godata`        |
+| `server.persistence.subpath.homego`           | The /home/go path on Persistence Volume                 | `homego`        |
+| `server.persistence.subpath.dockerEntryPoint` | The /docker-entrypoint.d path on Persistence Volume     | `scripts`       |
+| `server.persistence.extraVolumes`             | Additional server volumes                               | `[]`            |
+| `server.persistence.extraVolumeMounts`        | Additional server volumeMounts                          | `[]`            |
 
 ### Agent persistence Values
 
-| Parameter                                     | Description                                             | Default              |
-| --------------------------------------------- | ------------------------------------------------------- | -------------------- |
-| `agent.persistence.enabled`                   | Enable the use of a GoCD agent PVC                      | `false`              |
-| `agent.persistence.accessMode`                | The PVC access mode                                     | `ReadWriteOnce`      |
-| `agent.persistence.size`                      | The size of the PVC                                     | `1Gi`                |
-| `agent.persistence.storageClass`              | The PVC storage class name                              | `nil`                |
-| `agent.persistence.pvSelector`                | The godata Persistence Volume Selectors                 | `nil`                |
-| `agent.persistence.name.dockerEntryPoint`     | The Persitence Volume to mount at /docker-entrypoint.d/ | `goagent-vol`        |
-| `agent.persistence.subpath.homego`            | The /home/go path on Persistence Volume                 | `homego`             |
-| `agent.persistence.subpath.dockerEntryPoint`  | The /docker-entrypoint.d path on Persistence Volume     | `scripts`            |
-| `agent.persistence.extraVolumes`              | Additional agent volumes                                | `[]`                 |
-| `agent.persistence.extraVolumeMounts`         | Additional agent volumeMounts                           | `[]`                 |
+| Parameter                                    | Description                                             | Default         |
+|----------------------------------------------|---------------------------------------------------------|-----------------|
+| `agent.persistence.enabled`                  | Enable the use of a GoCD agent PVC                      | `false`         |
+| `agent.persistence.accessMode`               | The PVC access mode                                     | `ReadWriteOnce` |
+| `agent.persistence.size`                     | The size of the PVC                                     | `1Gi`           |
+| `agent.persistence.storageClass`             | The PVC storage class name                              | `nil`           |
+| `agent.persistence.pvSelector`               | The godata Persistence Volume Selectors                 | `nil`           |
+| `agent.persistence.name.dockerEntryPoint`    | The Persitence Volume to mount at /docker-entrypoint.d/ | `goagent-vol`   |
+| `agent.persistence.subpath.homego`           | The /home/go path on Persistence Volume                 | `homego`        |
+| `agent.persistence.subpath.dockerEntryPoint` | The /docker-entrypoint.d path on Persistence Volume     | `scripts`       |
+| `agent.persistence.extraVolumes`             | Additional agent volumes                                | `[]`            |
+| `agent.persistence.extraVolumeMounts`        | Additional agent volumeMounts                           | `[]`            |
 
 ##### Note:
 
@@ -434,28 +419,28 @@ helm install --namespace gocd --name gocd_app --set rbac.roleRef=ROLE_NAME stabl
 
 Service account can be configured specifically for agents. This configuration also allows for the reuse of the top level service account that is used to configure the server pod. The various settings and their possible states are described below:
 
-| Parameter | Description | Default |
-| --------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------- |
-| `agent.serviceAccount.reuseTopLevelServiceAccount`                   |  Specifies whether the top level service account (also used by the server) should be reused as the service account for gocd agents                                 | false                        |
-| `agent.serviceAccount.name`                   |  If reuseTopLevelServiceAccount is false, this field specifies the name of an existing service account to be associated with gocd agents. By default (name field is empty), no service account is created for gocd agents | `nil`                        |
+| Parameter                                          | Description                                                                                                                                                                                                              | Default   |
+|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
+| `agent.serviceAccount.reuseTopLevelServiceAccount` | Specifies whether the top level service account (also used by the server) should be reused as the service account for gocd agents                                                                                        | false     |
+| `agent.serviceAccount.name`                        | If reuseTopLevelServiceAccount is false, this field specifies the name of an existing service account to be associated with gocd agents. By default (name field is empty), no service account is created for gocd agents | `nil`     |
 
 Possible states:
 
-|State | Effect                                                                         |
-|------|--------------------------------------------------|
-|reuseTopLevelServiceAccount = false and name = empty|The service account 'default' will be used.|
-|reuseTopLevelServiceAccount = false and name = 'agentSA'|The 'agentSA' service account will be used. The service account needs to exist and bound with the appropriate role. |
-|reuseTopLevelServiceAccount = true| The GoCD service account will be created and used for the agents in the specified namespace. The permissions associated with the GoCD SA are defined above.  |
+| State                                                    | Effect                                                                                                                                                      |
+|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| reuseTopLevelServiceAccount = false and name = empty     | The service account 'default' will be used.                                                                                                                 |
+| reuseTopLevelServiceAccount = false and name = 'agentSA' | The 'agentSA' service account will be used. The service account needs to exist and bound with the appropriate role.                                         |
+| reuseTopLevelServiceAccount = true                       | The GoCD service account will be created and used for the agents in the specified namespace. The permissions associated with the GoCD SA are defined above. |
 
 ### Testing
 
 A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in this chart. To avoid creating misleading or unused resources in your clusters, the resources required to use `helm test` are not created by default in chart version `1.39.6+` and must be enabled as below.
 
-| Parameter         | Description                                                                                               | Default                                          |
-|-------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
-| `tests.enabled`   | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                                          |
-| `tests.batsImage` | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.5.0`                                |
-| `tests.curlImage` | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/patrickdappollonio/alpine-utils:latest` |
+| Parameter          | Description                                                                                               | Default                                          |
+|--------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| `tests.enabled`    | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                                          |
+| `tests.batsImage`  | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.5.0`                                |
+| `tests.curlImage`  | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/patrickdappollonio/alpine-utils:latest` |
 
 
 # Adding plugins
