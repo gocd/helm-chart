@@ -1,3 +1,5 @@
+### 1.39.8
+* [6e265688](https://github.com/gocd/helm-chart/commit/6e265688): Add ability to configure ingressClassName (thanks to @chadlwilson)
 ### 1.39.7
 * [77fbc5d0](https://github.com/gocd/helm-chart/commit/77fbc5d0): Add ability to annotate service accounts (thanks to @nalbam)
 ### 1.39.6
