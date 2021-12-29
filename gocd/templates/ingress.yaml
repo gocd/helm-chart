@@ -20,6 +20,9 @@ metadata:
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if .Values.server.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.server.ingress.ingressClassName }}
+  {{- end }}
   {{- if .Values.server.ingress.hosts }}
   {{ $dot := .}}
   rules:

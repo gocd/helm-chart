@@ -157,6 +157,10 @@ server:
   ingress:
     # server.ingress.enabled is the toggle to enable/disable GoCD Server Ingress
     enabled: true
+
+    # On Kubernetes 1.18+, use ingressClassName to override the default ingress class selection
+    # ingressClassName: nginx
+
     # server.ingress.hosts is used to create an Ingress record.
     # hosts:
     # - ci.example.com
