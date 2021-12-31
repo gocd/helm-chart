@@ -1,3 +1,5 @@
+### 1.40.0
+* [b957448](https://github.com/gocd/helm-chart/commit/b957448): Bump up GoCD Version to 21.4.0
 ### 1.39.8
 * [6e265688](https://github.com/gocd/helm-chart/commit/6e265688): Add ability to configure ingressClassName (thanks to @chadlwilson)
 ### 1.39.7
