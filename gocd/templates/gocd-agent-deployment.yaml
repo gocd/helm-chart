@@ -71,7 +71,7 @@ spec:
       {{- end }}
       {{- if .Values.agent.imagePullSecrets }}
       imagePullSecrets:
-        - name: {{ .Values.agent.imagePullSecret }}
+        - name: {{ .Values.agent.imagePullSecrets }}
       {{- end }}      
       containers:
         - name: {{ template "gocd.name" . }}-agent
