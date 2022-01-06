@@ -69,6 +69,10 @@ spec:
       initContainers:
 {{ toYaml .Values.agent.initContainers | indent 8 }}
       {{- end }}
+      {{- if .Values.agent.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.agent.imagePullSecret }}
+      {{- end }}      
       containers:
         - name: {{ template "gocd.name" . }}-agent
           {{- if .Values.agent.image.tag }}
