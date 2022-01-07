@@ -379,7 +379,7 @@ agent:
   #    args:
   #      - "-c"
   #      - 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl'
- 
+
   # specify image pull secrets. Explained in detail at https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry
   imagePullSecrets: {}
 
