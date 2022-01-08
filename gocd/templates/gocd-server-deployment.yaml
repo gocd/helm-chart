@@ -69,6 +69,9 @@ spec:
             secretName: {{ .Values.server.security.ssh.secretName }}
             defaultMode: {{ .Values.server.security.ssh.defaultMode | default 256 }}
       {{- end }}
+      {{- if .Values.server.image.pullSecrets }}
+      imagePullSecrets: {{ .Values.server.image.pullSecrets | toYaml | nindent 8 }}
+      {{- end }}
       {{- if .Values.server.initContainers }}
       initContainers:
 {{ toYaml .Values.server.initContainers | indent 8 }}

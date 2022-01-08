@@ -69,6 +69,11 @@ server:
     tag:
     # server.image.pullPolicy is the GoCD Server image's pull policy
     pullPolicy: "IfNotPresent"
+    # Specify an array of imagePullSecrets to pull from private registries
+    # You need to manually create secrets in the namespace
+    # See https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    pullSecrets: []
+#    - name: registryKeySecretName
 
   ## Configure GoCD server resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -300,6 +305,11 @@ agent:
     tag:
     # agent.image.pullPolicy is the GoCD Agent image's pull policy
     pullPolicy: "IfNotPresent"
+    # Specify an array of imagePullSecrets to pull from private registries
+    # You need to manually create secrets in the namespace
+    # See https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    pullSecrets: []
+#      - name: registryKeySecretName
   env:
     # agent.env.goServerUrl is the GoCD Server Url
     goServerUrl:
@@ -380,9 +390,6 @@ agent:
   #      - "-c"
   #      - 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl'
 
-  # specify image pull secrets. Explained in detail at https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry
-  imagePullSecrets: {}
-
   # specify restart policy for agents
   restartPolicy: Always
 
@@ -446,3 +453,8 @@ tests:
   batsImage: "bats/bats:1.5.0"
   # A image containing bash, curl and busybox|coreutils for executing tests
   curlImage: "ghcr.io/patrickdappollonio/alpine-utils:latest"
+  # Specify an array of imagePullSecrets to pull from private registries
+  # You need to manually create secrets in the namespace
+  # See https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  imagePullSecrets: []
+#    - name: registryKeySecretName

@@ -65,6 +65,7 @@ The following tables list the configurable parameters of the GoCD chart and thei
 | `server.image.repository`                    | GoCD server image                                                                                                                                    | `gocd/gocd-server`                         |
 | `server.image.tag`                           | GoCD server image tag                                                                                                                                | `.Chart.appVersion`                        |
 | `server.image.pullPolicy`                    | Image pull policy                                                                                                                                    | `IfNotPresent`                             |
+| `server.image.pullSecrets`                   | Image pull secrets for private registries                                                                                                            | `[]`                                       |
 | `server.resources`                           | GoCD server resource requests and limits                                                                                                             | `{}`                                       |
 | `server.initContainers`                      | GoCD server init containers                                                                                                                          | `[]`                                       |
 | `server.priorityClassName`                   | GoCD server priority class                                                                                                                           | `nil`                                      |
@@ -170,6 +171,7 @@ $ kubectl create secret generic gocd-server-ssh \
 | `agent.image.repository`                    | GoCD agent image                                                                                                                                                                 | `gocd/gocd-agent-alpine-3.14` |
 | `agent.image.tag`                           | GoCD agent image tag                                                                                                                                                             | `.Chart.appVersion`           |
 | `agent.image.pullPolicy`                    | Image pull policy                                                                                                                                                                | `IfNotPresent`                |
+| `agent.image.pullSecrets`                   | Image pull secrets for private registries                                                                                                                                        | `[]`                          |
 | `agent.resources`                           | GoCD agent resource requests and limits                                                                                                                                          | `{}`                          |
 | `agent.initContainers`                      | GoCD agent init containers                                                                                                                                                       | `[]`                          |
 | `agent.restartPolicy`                       | GoCD agent restart policy                                                                                                                                                        | `Always`                      |
@@ -437,12 +439,12 @@ Possible states:
 
 A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in this chart. To avoid creating misleading or unused resources in your clusters, the resources required to use `helm test` are not created by default in chart version `1.39.6+` and must be enabled as below.
 
-| Parameter          | Description                                                                                               | Default                                          |
-|--------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
-| `tests.enabled`    | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                                          |
-| `tests.batsImage`  | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.5.0`                                |
-| `tests.curlImage`  | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/patrickdappollonio/alpine-utils:latest` |
-
+| Parameter                | Description                                                                                               | Default                                          |
+|--------------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| `tests.enabled`          | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                                          |
+| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.5.0`                                |
+| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/patrickdappollonio/alpine-utils:latest` |
+| `tests.imagePullSecrets` | Image pull secrets for private registries                                                                 | `[]`                                             |
 
 # Adding plugins
 

@@ -65,14 +65,13 @@ spec:
             secretName: {{ .Values.agent.security.ssh.secretName }}
             defaultMode: {{ .Values.agent.security.ssh.defaultMode | default 256 }}
       {{- end }}
+      {{- if .Values.agent.image.pullSecrets }}
+      imagePullSecrets: {{ .Values.agent.image.pullSecrets | toYaml | nindent 8 }}
+      {{- end }}
       {{- if .Values.agent.initContainers }}
       initContainers:
 {{ toYaml .Values.agent.initContainers | indent 8 }}
       {{- end }}
-      {{- if .Values.agent.imagePullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Values.agent.imagePullSecrets }}
-      {{- end }}      
       containers:
         - name: {{ template "gocd.name" . }}-agent
           {{- if .Values.agent.image.tag }}
