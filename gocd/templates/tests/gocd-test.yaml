@@ -16,6 +16,9 @@ spec:
   ttlSecondsAfterFinished: 180
   template:
     spec:
+      {{- if .Values.tests.imagePullSecrets }}
+      imagePullSecrets: {{ .Values.tests.imagePullSecrets | toYaml | nindent 8 }}
+      {{- end }}
       initContainers:
         - name: "test-framework"
           image: {{ .Values.tests.batsImage }}
