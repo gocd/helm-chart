@@ -1,3 +1,5 @@
+### 1.40.2
+* [54b481fb](https://github.com/gocd/helm-chart/commit/54b481fb): Bump Alpine agent image version from 3.14 to 3.15 (thanks to @chadlwilson)
 ### 1.40.1
 * [b5c3af3f](https://github.com/gocd/helm-chart/commit/b5c3af3f): Support imagePullSecrets for server, static agent and tests (thanks to @brettcurtis and @chadlwilson)
 ### 1.40.0
