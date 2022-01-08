@@ -1,3 +1,5 @@
+### 1.40.1
+* [b5c3af3f](https://github.com/gocd/helm-chart/commit/b5c3af3f): Support imagePullSecrets for server, static agent and tests (thanks to @brettcurtis and @chadlwilson)
 ### 1.40.0
 * [b957448](https://github.com/gocd/helm-chart/commit/b957448): Bump up GoCD Version to 21.4.0
 ### 1.39.8
