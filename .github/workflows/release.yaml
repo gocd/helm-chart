@@ -21,9 +21,9 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Install Helm
-        uses: azure/setup-helm@v1
+        uses: azure/setup-helm@v2.0
         with:
-          version: v3.7.1
+          version: v3.8.0
 
       - name: Run chart-releaser
         # Change version back for 1.2.2+ - see https://github.com/helm/chart-releaser-action/pull/83
