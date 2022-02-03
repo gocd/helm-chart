@@ -1,3 +1,5 @@
+### 1.40.4
+* [52edbcbb](https://github.com/gocd/helm-chart/commit/52edbcbb): Switch to a smaller helm test-related image (thanks to @chadlwilson)
 ### 1.40.3
 * [e59be113](https://github.com/gocd/helm-chart/commit/e59be113): Use fixed SHA digest for helm test-related image (thanks to @chadlwilson)
 ### 1.40.2
