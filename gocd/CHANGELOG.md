@@ -1,3 +1,5 @@
+### 1.40.3
+* [e59be113](https://github.com/gocd/helm-chart/commit/e59be113): Use fixed SHA digest for helm test-related image (thanks to @chadlwilson)
 ### 1.40.2
 * [54b481fb](https://github.com/gocd/helm-chart/commit/54b481fb): Bump Alpine agent image version from 3.14 to 3.15 (thanks to @chadlwilson)
 ### 1.40.1
