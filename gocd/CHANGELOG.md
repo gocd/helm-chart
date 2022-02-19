@@ -1,3 +1,5 @@
+### 1.40.5
+* [344a65bf](https://github.com/gocd/helm-chart/commit/344a65bf): Bump Kubernetes Elastic Agent plugin version from 3.7.1 to 3.8.0
 ### 1.40.4
 * [52edbcbb](https://github.com/gocd/helm-chart/commit/52edbcbb): Switch to a smaller helm test-related image (thanks to @chadlwilson)
 ### 1.40.3
