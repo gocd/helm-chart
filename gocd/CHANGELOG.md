@@ -1,3 +1,5 @@
+### 1.40.8
+* [88d8bd96](https://github.com/gocd/helm-chart/commit/88d8bd96): Bump Kubernetes Elastic Agent plugin version from 3.8.0 to 3.8.1
 ### 1.40.7
 * [6aa8bec7](https://github.com/gocd/helm-chart/commit/6aa8bec7): Bump Docker Registry Artifact plugin version from 1.1.0 to 1.3.0
 ### 1.40.6
