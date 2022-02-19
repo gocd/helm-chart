@@ -1,3 +1,5 @@
+### 1.40.7
+* [6aa8bec7](https://github.com/gocd/helm-chart/commit/6aa8bec7): Bump Docker Registry Artifact plugin version from 1.1.0 to 1.3.0
 ### 1.40.6
 * [c241e28f](https://github.com/gocd/helm-chart/commit/c241e28f): Remove deprecated `agent.env.agentAutoRegisterEnvironemnts` value which was scheduled for removal 3 years ago.
 ### 1.40.5
