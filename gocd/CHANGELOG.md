@@ -1,3 +1,5 @@
+### 1.40.6
+* [c241e28f](https://github.com/gocd/helm-chart/commit/c241e28f): Remove deprecated `agent.env.agentAutoRegisterEnvironemnts` value which was scheduled for removal 3 years ago.
 ### 1.40.5
 * [344a65bf](https://github.com/gocd/helm-chart/commit/344a65bf): Bump Kubernetes Elastic Agent plugin version from 3.7.1 to 3.8.0
 ### 1.40.4

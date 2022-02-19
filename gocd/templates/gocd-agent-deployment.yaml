@@ -101,9 +101,6 @@ spec:
             {{- if .Values.agent.env.agentAutoRegisterEnvironments }}
             - name: AGENT_AUTO_REGISTER_ENVIRONMENTS
               value: {{ .Values.agent.env.agentAutoRegisterEnvironments }}
-            {{- else if .Values.agent.env.agentAutoRegisterEnvironemnts }}
-            - name: AGENT_AUTO_REGISTER_ENVIRONMENTS
-              value: {{ .Values.agent.env.agentAutoRegisterEnvironemnts }}
             {{- end }}
             {{- if .Values.agent.env.agentAutoRegisterHostname }}
             - name: AGENT_AUTO_REGISTER_HOSTNAME
