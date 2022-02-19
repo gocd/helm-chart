@@ -3,6 +3,38 @@ entries:
   gocd:
   - apiVersion: v1
     appVersion: 21.4.0
+    created: "2022-02-19T07:42:55.797171942Z"
+    description: GoCD is an open-source continuous delivery server to model and visualize
+      complex workflows with ease.
+    digest: 106cb28c58daf7ea288a4f97380d6db24424aa1cec52fc11c652623b97cdd13b
+    home: https://www.gocd.org/
+    icon: https://gocd.github.io/assets/images/go-icon-black-192x192.png
+    keywords:
+    - gocd
+    - ci
+    - cd
+    - ci/cd
+    - continuous-integration
+    - continuous-delivery
+    - continuous-deployment
+    - continuous-testing
+    maintainers:
+    - email: arvind@thoughtworks.com
+      name: arvindsv
+    - email: ganeshpl@thoughtworks.com
+      name: ganeshspatil
+    - email: varshasvaradarajan@gmail.com
+      name: varshavaradarajan
+    - email: chadw@thoughtworks.com
+      name: chadlwilson
+    name: gocd
+    sources:
+    - https://github.com/gocd/gocd
+    urls:
+    - https://github.com/gocd/helm-chart/releases/download/gocd-1.40.6/gocd-1.40.6.tgz
+    version: 1.40.6
+  - apiVersion: v1
+    appVersion: 21.4.0
     created: "2022-02-19T07:23:34.868705189Z"
     description: GoCD is an open-source continuous delivery server to model and visualize
       complex workflows with ease.
@@ -3417,4 +3449,4 @@ entries:
     urls:
     - https://github.com/gocd/helm-chart/releases/download/1.0.0/gocd-1.0.0.tgz
     version: 1.0.0
-generated: "2022-02-19T07:23:34.870864521Z"
+generated: "2022-02-19T07:42:55.8076125Z"
