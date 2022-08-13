@@ -1,3 +1,5 @@
+### 1.42.0
+* [afd2c64](https://github.com/gocd/helm-chart/commit/afd2c64): Bump up GoCD Version to 22.2.0
 ### 1.41.1
 * [9a40e5ac](https://github.com/gocd/helm-chart/commit/9a40e5ac): Bump Kubernetes Elastic Agent plugin version from 3.8.1 to 3.8.2
 * [6c544cfd](https://github.com/gocd/helm-chart/commit/6c544cfd): Bump Docker Registry Artifact plugin version from 1.3.0 to 1.3.1
