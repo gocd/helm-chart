@@ -1,3 +1,5 @@
+### 1.42.1
+* [0df35fa1](https://github.com/gocd/helm-chart/commit/0df35fa1): Bump testing images to later versions
 ### 1.42.0
 * [afd2c64](https://github.com/gocd/helm-chart/commit/afd2c64): Bump up GoCD Version to 22.2.0
 ### 1.41.1
