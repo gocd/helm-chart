@@ -300,7 +300,7 @@ agent:
   deployStrategy: {}
   image:
     # agent.image.repository is the GoCD Agent image name
-    repository: "gocd/gocd-agent-alpine-3.15"
+    repository: "gocd/gocd-agent-alpine-3.16"
     # agent.image.tag is the GoCD Agent image's tag
     tag:
     # agent.image.pullPolicy is the GoCD Agent image's pull policy
