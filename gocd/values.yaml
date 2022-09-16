@@ -300,7 +300,7 @@ agent:
   deployStrategy: {}
   image:
     # agent.image.repository is the GoCD Agent image name
-    repository: "gocd/gocd-agent-alpine-3.15"
+    repository: "gocd/gocd-agent-alpine-3.16"
     # agent.image.tag is the GoCD Agent image's tag
     tag:
     # agent.image.pullPolicy is the GoCD Agent image's pull policy
@@ -446,10 +446,10 @@ tests:
   # Whether or not to create test resources for use in Helm chart testing.
   # Without the resources being created the tests will not work; however the installation is cleaner.
   enabled: false
-  # A BATS image to supply test runner
-  batsImage: "bats/bats:1.7.0"
-  # A image containing bash, curl and busybox|coreutils for executing tests
-  curlImage: "ghcr.io/containeroo/alpine-toolbox:2.0.11"
+  # A BATS image to supply test runner, see https://hub.docker.com/r/bats/bats/tags
+  batsImage: "bats/bats:1.8.0"
+  # A image containing bash, curl and busybox|coreutils for executing tests, see https://github.com/containeroo/alpine-toolbox/releases
+  curlImage: "ghcr.io/containeroo/alpine-toolbox:2.0.15"
   # Specify an array of imagePullSecrets to pull from private registries
   # You need to manually create secrets in the namespace
   # See https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
