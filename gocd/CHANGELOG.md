@@ -1,3 +1,5 @@
+### 1.43.0
+* [d685e31](https://github.com/gocd/helm-chart/commit/d685e31): Bump up GoCD Version to 22.3.0
 ### 1.42.2
 * [1b19b4e1](https://github.com/gocd/helm-chart/commit/1b19b4e1): Use GoCD Agent Alpine 3.16 images by default
 * [ebcf1558](https://github.com/gocd/helm-chart/commit/ebcf1558), [4e302d26](https://github.com/gocd/helm-chart/commit/4e302d26): Bump testing images to later versions
