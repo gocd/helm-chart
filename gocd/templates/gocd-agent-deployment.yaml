@@ -45,9 +45,7 @@ spec:
         runAsUser: {{ .Values.agent.securityContext.runAsUser }}
         runAsGroup: {{ .Values.agent.securityContext.runAsGroup }}
         fsGroup: {{ .Values.agent.securityContext.fsGroup }}
-        {{- if semverCompare ">=1.20-0" $.Capabilities.KubeVersion.Version }}
-        fsGroupChangePolicy: {{ .Values.agent.securityContext.fsGroupChangePolicy | default "Always" }}
-        {{- end }}
+        fsGroupChangePolicy: {{ .Values.agent.securityContext.fsGroupChangePolicy }}
       {{- if or .Values.agent.persistence.enabled (or .Values.agent.security.ssh.enabled .Values.agent.persistence.extraVolumes) }}
       volumes:
       {{- end }}

@@ -43,9 +43,7 @@ spec:
         runAsUser: {{ .Values.server.securityContext.runAsUser }}
         runAsGroup: {{ .Values.server.securityContext.runAsGroup }}
         fsGroup: {{ .Values.server.securityContext.fsGroup }}
-        {{- if semverCompare ">=1.20-0" $.Capabilities.KubeVersion.Version }}
-        fsGroupChangePolicy: {{ .Values.server.securityContext.fsGroupChangePolicy | default "Always" }}
-        {{- end }}
+        fsGroupChangePolicy: {{ .Values.server.securityContext.fsGroupChangePolicy }}
       serviceAccountName: {{ template "gocd.serviceAccountName" . }}
       {{- if or .Values.server.shouldPreconfigure (or .Values.server.persistence.enabled (or .Values.server.security.ssh.enabled .Values.server.persistence.extraVolumes)) }}
       volumes:

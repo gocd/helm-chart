@@ -13,7 +13,7 @@ To quickly build your first pipeline while learning key GoCD concepts, visit the
 ## Prerequisites
 
 - Helm 3 (Helm 2 _may_ work, but considered deprecated and may break)
-- Kubernetes 1.14+ with Beta APIs enabled
+- Kubernetes 1.20+
 - PV provisioner support in the underlying infrastructure
 - LoadBalancer support or Ingress Controller
 
@@ -79,8 +79,8 @@ The following tables list the configurable parameters of the GoCD chart and thei
 | `server.service.loadBalancerSourceRanges`    | GoCD server service Load Balancer source IP ranges to whitelist                                                                                      | `nil`                                      |
 | `server.service.httpPort`                    | GoCD server service HTTP port                                                                                                                        | `8153`                                     |
 | `server.service.nodeHttpPort`                | GoCD server service node HTTP port. **Note**: A random nodePort will get assigned if not specified                                                   | `nil`                                      |
-| `server.ingress.enabled`                     | Enable/disable GoCD ingress. Allow traffic from outside the cluster via http. Do `kubectl describe ing` to get the public ip for access              | `true`                                     |
-| `server.ingress.ingressClassName`            | Ingress class that GoCD ingress should use (K8S 1.18+)                                                                                               | `nil`                                      |
+| `server.ingress.enabled`                     | Enable/disable GoCD ingress. Allow traffic from outside the cluster via http. Do `kubectl describe ing` to get the public IP for access              | `true`                                     |
+| `server.ingress.ingressClassName`            | Ingress class that GoCD ingress should use                                                                                                           | `nil`                                      |
 | `server.ingress.hosts`                       | GoCD ingress hosts records.                                                                                                                          | `nil`                                      |
 | `server.ingress.annotations`                 | GoCD ingress annotations.                                                                                                                            | `{}`                                       |
 | `server.ingress.path`                        | GoCD ingress path.                                                                                                                                   | `/`                                        |
@@ -97,7 +97,7 @@ The following tables list the configurable parameters of the GoCD chart and thei
 | `server.securityContext.runAsUser`           | The container user for all the GoCD server pods.                                                                                                     | `1000`                                     |
 | `server.securityContext.runAsGroup`          | The container group for all the GoCD server pods.                                                                                                    | `0`                                        |
 | `server.securityContext.fsGroup`             | The container supplementary group for all the GoCD server pods.                                                                                      | `0`                                        |
-| `server.securityContext.fsGroupChangePolicy` | The policy for checking fsGroup permissions on GoCD server pods (K8S 1.20+)                                                                          | `Always`                                   |
+| `server.securityContext.fsGroupChangePolicy` | The policy for checking fsGroup permissions on GoCD server pods                                                                                      | `OnRootMismatch`                           |
 | `server.sidecarContainers`                   | Sidecar containers to run alongside GoCD server.                                                                                                     | `[]`                                       |
 
 #### Preconfiguring the GoCD Server
@@ -199,7 +199,7 @@ $ kubectl create secret generic gocd-server-ssh \
 | `agent.securityContext.runAsUser`           | The container user for all the GoCD agent pods.                                                                                                                                  | `1000`                        |
 | `agent.securityContext.runAsGroup`          | The container group for all the GoCD agent pods.                                                                                                                                 | `0`                           |
 | `agent.securityContext.fsGroup`             | The container supplementary group for all the GoCD agent pods.                                                                                                                   | `0`                           |
-| `agent.securityContext.fsGroupChangePolicy` | The policy for checking fsGroup permissions on GoCD agent pods (K8S 1.20+)                                                                                                       | `Always`                      |
+| `agent.securityContext.fsGroupChangePolicy` | The policy for checking fsGroup permissions on GoCD agent pods                                                                                                                   | `OnRootMismatch`              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
@@ -300,7 +300,7 @@ the defined `fsGroup`, as documented [here](https://kubernetes.io/blog/2020/12/1
 This can be extremely slow on large volume mounts and will be observed as your pod being stuck in `ContainerCreating`
 for a long period of time; with events on the pod related to volume mounting.
 
-From Kubernetes `1.20+` this behaviour can be changed using `server.securityContext.fsGroupChangePolicy` (and equivalent
+This behaviour can be changed using `server.securityContext.fsGroupChangePolicy` (and equivalent
 property for your GoCD agents if necessary), further [documented here](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods).
 
 ### Server persistence Values
