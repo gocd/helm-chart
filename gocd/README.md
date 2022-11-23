@@ -168,7 +168,7 @@ $ kubectl create secret generic gocd-server-ssh \
 | `agent.postStart`                           | Commands to run after agent startup.                                                                                                                                             | `nil`                         |
 | `agent.terminationGracePeriodSeconds`       | Optional duration in seconds the gocd agent pods need to terminate gracefully.                                                                                                   | `nil`                         |
 | `agent.deployStrategy`                      | GoCD Agent [deployment strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).                                                                | `{}`                          |
-| `agent.image.repository`                    | GoCD agent image                                                                                                                                                                 | `gocd/gocd-agent-alpine-3.15` |
+| `agent.image.repository`                    | GoCD agent image                                                                                                                                                                 | `gocd/gocd-agent-alpine-3.16` |
 | `agent.image.tag`                           | GoCD agent image tag                                                                                                                                                             | `.Chart.appVersion`           |
 | `agent.image.pullPolicy`                    | Image pull policy                                                                                                                                                                | `IfNotPresent`                |
 | `agent.image.pullSecrets`                   | Image pull secrets for private registries                                                                                                                                        | `[]`                          |
@@ -357,7 +357,7 @@ agent:
         subPath: kubectl
   initContainers:
     - name: download-kubectl
-      image: "ellerbrock/alpine-bash-curl-ssl:latest"
+      image: "ghcr.io/containeroo/alpine-toolbox:latest"
       imagePullPolicy: "IfNotPresent"
       volumeMounts:
         - name: kubectl
@@ -442,8 +442,8 @@ A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in th
 | Parameter                | Description                                                                                               | Default                                          |
 |--------------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
 | `tests.enabled`          | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                                          |
-| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.5.0`                                |
-| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/patrickdappollonio/alpine-utils:latest` |
+| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.8.2`                                |
+| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/containeroo/alpine-toolbox:2.0.20` |
 | `tests.imagePullSecrets` | Image pull secrets for private registries                                                                 | `[]`                                             |
 
 # Adding plugins
