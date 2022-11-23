@@ -12,7 +12,7 @@ To quickly build your first pipeline while learning key GoCD concepts, visit the
 
 ## Prerequisites
 
-- Helm 3 (Helm 2 _may_ work, but considered deprecated and may break)
+- Helm 3
 - Kubernetes 1.20+
 - PV provisioner support in the underlying infrastructure
 - LoadBalancer support or Ingress Controller
