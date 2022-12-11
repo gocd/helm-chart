@@ -1,3 +1,6 @@
+### 2.0.1
+* Test against Kubernetes 1.26.0 (thanks to @chadlwilson)
+* Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.0.0
 * [5f5f69a8](https://github.com/gocd/helm-chart/commit/5f5f69a8): Require Kubernetes 1.20+ for use with chart (drops support for EOL Kubernetes versions) (thanks to @chadlwilson)
 * [5f5f69a8](https://github.com/gocd/helm-chart/commit/5f5f69a8): Change default behaviour of persistent volumes to check permissions only on the root (thanks to @chadlwilson)
