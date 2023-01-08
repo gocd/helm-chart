@@ -1,3 +1,6 @@
+### 2.0.2
+* Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
+* Bump Helm test tools to latest versions (thanks to @chadlwilson)
 ### 2.0.1
 * Test against Kubernetes 1.26.0 (thanks to @chadlwilson)
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
