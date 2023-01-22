@@ -17,13 +17,9 @@ rules:
 - apiGroups: [""]
   resources:
   - nodes
-  verbs: ["get", "list"]
+  verbs: ["list"]
 - apiGroups: [""]
   resources:
   - events
-  verbs: ["list", "watch"]
-- apiGroups: [""]
-  resources:
-  - namespaces
-  verbs: ["get"]
+  verbs: ["list"]
 {{ end }}
