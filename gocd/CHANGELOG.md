@@ -1,4 +1,6 @@
 ### 2.0.3
+* Fixed indentation misalignment in gocd-agent-deployment
+### 2.0.3
 * Remove permissions unnecessary for elastic agents from default ClusterRole
 ### 2.0.2
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
