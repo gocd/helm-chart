@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        k8s: # See https://hub.docker.com/r/kindest/node/tags and https://endoflife.date/kubernetes
-          - v1.21.14 # EOL 2022-06-28
+        k8s: # See https://hub.docker.com/r/kindest/node/tags for valid tags
+          # For relevant EOLs https://endoflife.date/kubernetes / https://endoflife.date/amazon-eks / https://endoflife.date/azure-kubernetes-service / https://endoflife.date/google-kubernetes-engine
           - v1.22.15 # EOL 2022-10-28
           - v1.23.13 # EOL 2023-02-28
           - v1.24.7  # EOL 2023-07-28
