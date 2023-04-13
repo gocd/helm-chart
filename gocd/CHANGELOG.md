@@ -1,3 +1,5 @@
+### 2.1.1
+* Bump Chart test tool images to latest patched versions (thanks to @chadlwilson)
 ### 2.1.0
 * [2b8f3fa](https://github.com/gocd/helm-chart/commit/2b8f3fa): Bump up GoCD Version to 23.1.0
 ### 2.0.4
