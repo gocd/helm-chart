@@ -1,3 +1,5 @@
+### 2.1.3
+* Bump docker-registry-artifact-plugin to latest patched version (thanks to @chadlwilson)
 ### 2.1.2
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.1.1
