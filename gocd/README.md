@@ -391,14 +391,15 @@ If RBAC is enabled,
  If `rbac.create=true` and `serviceAccount.create=false`, the `default` service account in the namespace will be used for cluster role binding.
 
 
-| Parameter                     | Description                                                         | Default             |
-|-------------------------------|---------------------------------------------------------------------|---------------------|
-| `rbac.create`                 | If true, a gocd service account, role, and role binding is created. | `true`              |
-| `rbac.apiVersion`             | The Kubernetes API version                                          | `v1beta1`           |
-| `rbac.roleRef`                | An existing role that can be bound to the gocd service account.     | `nil`               |
-| `serviceAccount.create`       | Specifies whether a service account should be created.              | `true`              |
-| `serviceAccount.name`         | Name of the service account.                                        | `nil`               |
-| `serviceAccount.annotations`  | Annotations for created service account.                            | `{}`                |
+| Parameter                    | Description                                                         | Default   |
+|------------------------------|---------------------------------------------------------------------|-----------|
+| `rbac.create`                | If true, a gocd service account, role, and role binding is created. | `true`    |
+| `rbac.apiVersion`            | The Kubernetes API version                                          | `v1beta1` |
+| `rbac.roleRef`               | An existing role that can be bound to the gocd service account.     | `nil`     |
+| `rbac.additionalRules`       | Additional rules for gocd cluster role.                             | `[]`      |
+| `serviceAccount.create`      | Specifies whether a service account should be created.              | `true`    |
+| `serviceAccount.name`        | Name of the service account.                                        | `nil`     |
+| `serviceAccount.annotations` | Annotations for created service account.                            | `{}`      |
 
 If `rbac.create=false`, the service account that will be used, either the default or one that's created, will not have the cluster scope or pod privileges to use with the Kubernetes EA plugin.
 A cluster role binding must be created like below:
