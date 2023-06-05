@@ -396,7 +396,7 @@ If RBAC is enabled,
 | `rbac.create`                | If true, a gocd service account, role, and role binding is created. | `true`    |
 | `rbac.apiVersion`            | The Kubernetes API version                                          | `v1beta1` |
 | `rbac.roleRef`               | An existing role that can be bound to the gocd service account.     | `nil`     |
-| `rbac.additionalRules`       | Additional rules for gocd cluster role.                             | `[]`      |
+| `rbac.extraRules`            | Additional rules for gocd cluster role.                             | `[]`      |
 | `serviceAccount.create`      | Specifies whether a service account should be created.              | `true`    |
 | `serviceAccount.name`        | Name of the service account.                                        | `nil`     |
 | `serviceAccount.annotations` | Annotations for created service account.                            | `{}`      |

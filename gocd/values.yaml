@@ -9,12 +9,12 @@ rbac:
   apiVersion: v1
   # Create a cluster role binding with the existing role, do not create a new one. If left blank, a new cluster role is created.
   roleRef:
-  # Additional rules that will be included inside cluster role, for example when using with https://github.com/gocd/gocd-kubernetes-based-secrets-plugin
-  additionalRules: []
-    # - apiGroups: [""]
-    #   resources:
-    #   - secrets
-    #   verbs: ["get"]
+  # Extra rules that will be included inside cluster role, for example when using with https://github.com/gocd/gocd-kubernetes-based-secrets-plugin
+  extraRules: []
+  # - apiGroups: [""]
+  #   resources:
+  #   - secrets
+  #   verbs: ["get"]
 
 serviceAccount:
   # Specifies whether a service account should be created
