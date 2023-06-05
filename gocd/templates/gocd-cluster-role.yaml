@@ -22,4 +22,7 @@ rules:
   resources:
   - events
   verbs: ["list"]
+{{- if .Values.rbac.extraRules }}
+{{ toYaml .Values.rbac.extraRules }}
+{{ end }}
 {{ end }}

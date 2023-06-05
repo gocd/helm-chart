@@ -1,3 +1,5 @@
+### 2.1.5
+* Add rbac.extraRules to allow granting gocd cluster role more permissions if needed
 ### 2.1.4
 * Bump docker-registry-artifact-plugin to latest patched version (thanks to @chadlwilson)
 ### 2.1.3
