@@ -1,5 +1,7 @@
+### 2.1.6
+* Bump Chart test images/tools to latest patched versions (thanks to @chadlwilson)
 ### 2.1.5
-* Add rbac.extraRules to allow granting gocd cluster role more permissions if needed
+* Add rbac.extraRules to allow granting gocd cluster role more permissions if needed (thanks to @voanhduy1512)
 ### 2.1.4
 * Bump docker-registry-artifact-plugin to latest patched version (thanks to @chadlwilson)
 ### 2.1.3
