@@ -16,10 +16,10 @@ jobs:
         k8s: # See https://hub.docker.com/r/kindest/node/tags for valid tags
           # For relevant EOLs https://endoflife.date/kubernetes / https://endoflife.date/amazon-eks / https://endoflife.date/azure-kubernetes-service / https://endoflife.date/google-kubernetes-engine
           - v1.23.17 # EOL 2023-02-28
-          - v1.24.13 # EOL 2023-07-28
-          - v1.25.9  # EOL 2023-10-27
-          - v1.26.4  # EOL 2024-02-28
-          - v1.27.2  # EOL 2024-06-28
+          - v1.24.15 # EOL 2023-07-28
+          - v1.25.11 # EOL 2023-10-27
+          - v1.26.6  # EOL 2024-02-28
+          - v1.27.3  # EOL 2024-06-28
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,7 +29,7 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v3
         with:
-          version: v3.12.0 # See https://github.com/helm/helm/releases
+          version: v3.12.1 # See https://github.com/helm/helm/releases
 
       - uses: actions/setup-python@v4
         with:
