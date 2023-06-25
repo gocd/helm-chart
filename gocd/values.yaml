@@ -455,7 +455,7 @@ tests:
   # A BATS image to supply test runner, see https://hub.docker.com/r/bats/bats/tags
   batsImage: "bats/bats:1.9.0"
   # A image containing bash, curl and busybox|coreutils for executing tests, see https://github.com/containeroo/alpine-toolbox/releases
-  curlImage: "ghcr.io/containeroo/alpine-toolbox:2.0.48"
+  curlImage: "ghcr.io/containeroo/alpine-toolbox:2.0.49"
   # Specify an array of imagePullSecrets to pull from private registries
   # You need to manually create secrets in the namespace
   # See https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
