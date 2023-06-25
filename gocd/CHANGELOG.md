@@ -1,3 +1,5 @@
+### 2.1.7
+* Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.1.6
 * Bump Chart test images/tools to latest patched versions (thanks to @chadlwilson)
 ### 2.1.5
