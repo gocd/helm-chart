@@ -5,6 +5,10 @@ on:
     workflows: [Lint and Test Charts]
     branches: [master]
     types: [completed]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   release:
     runs-on: ubuntu-latest
