@@ -1,3 +1,5 @@
+### 2.2.0
+* [1c5f283](https://github.com/gocd/helm-chart/commit/1c5f283): Bump up GoCD Version to 23.2.0
 ### 2.1.8
 * Bump docker-registry-artifact-plugin to latest patched version (thanks to @chadlwilson)
 ### 2.1.7
