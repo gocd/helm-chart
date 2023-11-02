@@ -1,3 +1,5 @@
+### 2.4.0
+* [ee7708f](https://github.com/gocd/helm-chart/commit/ee7708f): Bump up GoCD Version to 23.4.0
 ### 2.3.1
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.3.0
