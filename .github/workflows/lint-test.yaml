@@ -41,8 +41,6 @@ jobs:
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.1
-        with:
-          version: '3.8.0' # Lock version due to https://github.com/helm/chart-testing/issues/604
 
       - name: Run chart-testing (list-changed)
         id: list-changed
