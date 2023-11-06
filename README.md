@@ -4,7 +4,7 @@ The Official GoCD Helm Chart repository which hosts all the helm charts related 
 
 ## List of available helm charts
 
-- [gocd/gocd](https://github.com/gocd/helm-chart/blob/master/gocd/README.md)
+- [gocd/gocd](https://github.com/gocd/helm-chart/blob/master/gocd/README.md) ([on Artifact Hub](https://artifacthub.io/packages/helm/gocd/gocd))
 
 ## Usage
 

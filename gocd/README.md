@@ -37,6 +37,17 @@ The command deploys GoCD on the Kubernetes cluster in the default configuration.
 
 Please see [CHANGELOG.md](./CHANGELOG.md).
 
+## Security
+
+[Artifact Hub](https://artifacthub.io/packages/helm/gocd/gocd) uses [Trivy](https://github.com/aquasecurity/trivy) to 
+assess and report [potential vulnerabilities](https://artifacthub.io/packages/helm/gocd/gocd?modal=security-report) from
+the default server and agent images present within the chart, including Java dependencies that are part of GoCD components.
+While this may change over time, it is likely that these reported vulnerabilities do not affect GoCD's usage of these 
+libraries/frameworks. You can review the team's [assessment and suppressions here](https://github.com/gocd/gocd/blob/master/buildSrc/dependency-check-suppress.xml) if you would like to propagate these suppressions to
+your own environment.
+
+More generally, please consult GoCD's [security policy here](https://github.com/gocd/gocd/blob/master/SECURITY.md).
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `gocd_app` deployment:
