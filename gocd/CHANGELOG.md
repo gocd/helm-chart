@@ -1,3 +1,5 @@
+### 2.4.1
+* Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.4.0
 * [ee7708f](https://github.com/gocd/helm-chart/commit/ee7708f): Bump up GoCD Version to 23.4.0
 ### 2.3.1
@@ -5,7 +7,7 @@
 ### 2.3.0
 * [c8a6601](https://github.com/gocd/helm-chart/commit/c8a6601): Bump up GoCD Version to 23.3.0
 ### 2.2.1
-* Change default agent image to one baed on Alpine 3.18
+* Change default agent image to one based on Alpine 3.18
 ### 2.2.0
 * [1c5f283](https://github.com/gocd/helm-chart/commit/1c5f283): Bump up GoCD Version to 23.2.0
 ### 2.1.8
