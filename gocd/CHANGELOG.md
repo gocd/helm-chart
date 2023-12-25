@@ -1,4 +1,4 @@
-### 2.4.2
+### 2.4.3
 * Bump testing tool image to latest version
 ### 2.4.1
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)

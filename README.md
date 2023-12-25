@@ -1,3 +1,6 @@
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gocd)](https://artifacthub.io/packages/search?repo=gocd)
+![Latest version](https://img.shields.io/github/v/release/gocd/helm-chart)
+
 # GoCD Helm Chart Repository
 
 The Official GoCD Helm Chart repository which hosts all the helm charts related to GoCD.
@@ -23,7 +26,7 @@ helm search repo gocd/gocd
 # License
 
 ```plain
-Copyright 2022 Thoughtworks, Inc.
+Copyright 2023 Thoughtworks, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
