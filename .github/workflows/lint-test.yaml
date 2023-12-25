@@ -18,12 +18,12 @@ jobs:
       matrix:
         k8s: # See https://hub.docker.com/r/kindest/node/tags for valid tags
           # For relevant EOLs https://endoflife.date/kubernetes / https://endoflife.date/amazon-eks / https://endoflife.date/azure-kubernetes-service / https://endoflife.date/google-kubernetes-engine
-          - v1.23.17 # EOL 2023-02-28 (latest 2023-10-11 for EKS)
           - v1.24.15 # EOL 2023-07-28 (latest 2024-01-31 for EKS)
-          - v1.25.11 # EOL 2023-10-27 (latest 2024-05-07 for EKS)
+          - v1.25.11 # EOL 2023-10-27 (latest 2024-05-01 for EKS)
           - v1.26.6  # EOL 2024-02-28 (latest 2024-06-01 for EKS)
-          - v1.27.3  # EOL 2024-06-28 (latest 2024-08-24 for GKE)
+          - v1.27.3  # EOL 2024-06-28 (latest 2024-08-31 for AKS)
           - v1.28.0  # EOL 2024-10-28 (latest 2024-11-01 for EKS)
+          - v1.29.0  # EOL 2025-02-28
     steps:
       - name: Checkout
         uses: actions/checkout@v4
