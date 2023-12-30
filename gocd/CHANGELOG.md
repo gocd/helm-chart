@@ -1,3 +1,5 @@
+### 2.5.1
+* Change default agent image to one based on Alpine 3.19
 ### 2.5.0
 * [d42c7ea](https://github.com/gocd/helm-chart/commit/d42c7ea): Bump up GoCD Version to 23.5.0
 ### 2.4.3
