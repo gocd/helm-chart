@@ -1,3 +1,5 @@
+### 2.5.2
+* Bump elastic agent plugin to [v3.9.1-501](https://github.com/gocd/kubernetes-elastic-agents/releases/tag/v3.9.1-501)
 ### 2.5.1
 * Change default agent image to one based on Alpine 3.19
 ### 2.5.0

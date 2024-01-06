@@ -144,7 +144,7 @@ server:
     #  server.env.extraEnvVars is the list of environment variables passed to GoCD Server
     extraEnvVars:
       - name: GOCD_PLUGIN_INSTALL_kubernetes-elastic-agents
-        value: https://github.com/gocd/kubernetes-elastic-agents/releases/download/v3.9.0-480/kubernetes-elastic-agent-3.9.0-480.jar
+        value: https://github.com/gocd/kubernetes-elastic-agents/releases/download/v3.9.1-501/kubernetes-elastic-agent-3.9.1-501.jar
       - name: GOCD_PLUGIN_INSTALL_docker-registry-artifact-plugin
         value: https://github.com/gocd/docker-registry-artifact-plugin/releases/download/v1.4.0-587/docker-registry-artifact-plugin-1.4.0-587.jar
   service:
