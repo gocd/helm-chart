@@ -1,4 +1,4 @@
-{{- if .Values.server.shouldPreconfigure }}
+{{- if and .Values.server.enabled .Values.server.shouldPreconfigure }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,10 +11,6 @@ metadata:
 data:
   preconfigure_server.sh: |-
     #!/bin/bash
-
-    SERVICE_ACCOUNT_PATH=/var/run/secrets/kubernetes.io/serviceaccount
-    KUBE_TOKEN=$(<${SERVICE_ACCOUNT_PATH}/token)
-
     while true
     do
       status_code=$(curl 'http://localhost:8153/go/api/v1/health' -o /dev/null -w "%{http_code}")
@@ -39,28 +35,16 @@ data:
     echo "Trying to configure cluster profile." >> /godata/logs/preconfigure.log
 
     (curl --fail -i 'http://localhost:8153/go/api/admin/elastic/cluster_profiles' \
-      -H'Accept: application/vnd.go.cd+json'  \
+      -H 'Accept: application/vnd.go.cd+json'  \
       -H 'Content-Type: application/json' \
       -X POST -d '{
         "id": "k8-cluster-profile",
         "plugin_id": "cd.go.contrib.elasticagent.kubernetes",
         "properties": [
-              {
+            {
                 "key": "go_server_url",
                 "value": "http://{{ template "gocd.fullname" . }}-server.{{ .Release.Namespace }}:{{ .Values.server.service.httpPort }}/go"
-            },
-            {
-                "key": "kubernetes_cluster_url",
-                "value": "https://'$KUBERNETES_SERVICE_HOST':'$KUBERNETES_SERVICE_PORT_HTTPS'"
-              },
-              {
-                "key": "namespace",
-                "value": "{{ .Release.Namespace }}"
-              },
-              {
-                "key": "security_token",
-                "value": "'$KUBE_TOKEN'"
-              }
+            }
           ]
       }' >> /godata/logs/preconfigure.log)
 
@@ -75,19 +59,15 @@ data:
         "properties": [
           {
             "key": "Image",
-            "value": "gocd/gocd-agent-docker-dind:v{{ .Chart.AppVersion }}"
+            "value": "{{ .Values.agent.image.repository }}:v{{ .Chart.AppVersion }}"
           },
           {
             "key": "PodConfiguration",
-            "value": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: gocd-agent-{{ `{{ POD_POSTFIX }}` }}\n  labels:\n    app: web\nspec:\n  serviceAccountName: {{ template "gocd.agentServiceAccountName" . }}\n  containers:\n    - name: gocd-agent-container-{{ `{{ CONTAINER_POSTFIX }}` }}\n      image: gocd/gocd-agent-docker-dind:v{{ .Chart.AppVersion }}\n      securityContext:\n        privileged: true"
+            "value": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: gocd-agent-{{ `{{ POD_POSTFIX }}` }}\n  labels:\n    app: web\nspec:\n  serviceAccountName: {{ template "gocd.agentServiceAccountName" . }}\n  containers:\n    - name: gocd-agent-container-{{ `{{ CONTAINER_POSTFIX }}` }}\n      image: {{ .Values.agent.image.repository }}:v{{ .Chart.AppVersion }}"
           },
           {
             "key": "PodSpecType",
             "value": "yaml"
-          },
-          {
-            "key": "Privileged",
-            "value": "true"
           }
         ]
       }' >> /godata/logs/preconfigure.log)

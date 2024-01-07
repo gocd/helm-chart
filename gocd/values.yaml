@@ -25,6 +25,7 @@ serviceAccount:
   name:
   annotations:
     # eks.amazonaws.com/role-arn: arn:aws:iam::123456789000:role/iam-role-name-here
+  automountServiceAccountToken: true
 
 server:
   # server.enabled is the toggle to run GoCD Server. Change to false for Agent Only Deployment.
@@ -53,7 +54,6 @@ server:
     # Specify the policy for checking volume permissions
     fsGroupChangePolicy: "OnRootMismatch"
   # server.shouldPreconfigure is used to invoke a script to pre configure the elastic agent profile and the plugin settings in the GoCD server.
-  # Note: If this value is set to true, then, the serviceAccount.name is configured for the GoCD server pod. The service account token is mounted as a secret and is used in the lifecycle hook.
   # Note: An attempt to preconfigure the GoCD server is made. There are cases where the pre-configuration can fail and the GoCD server starts with an empty config.
   shouldPreconfigure: true
   preconfigureCommand:
@@ -144,7 +144,7 @@ server:
     #  server.env.extraEnvVars is the list of environment variables passed to GoCD Server
     extraEnvVars:
       - name: GOCD_PLUGIN_INSTALL_kubernetes-elastic-agents
-        value: https://github.com/gocd/kubernetes-elastic-agents/releases/download/v3.9.1-501/kubernetes-elastic-agent-3.9.1-501.jar
+        value: https://github.com/gocd/kubernetes-elastic-agents/releases/download/v4.0.0-505/kubernetes-elastic-agent-4.0.0-505.jar
       - name: GOCD_PLUGIN_INSTALL_docker-registry-artifact-plugin
         value: https://github.com/gocd/docker-registry-artifact-plugin/releases/download/v1.4.0-587/docker-registry-artifact-plugin-1.4.0-587.jar
   service:
@@ -264,6 +264,7 @@ agent:
     # if reuseTopLevelServiceAccount is false, this field specifies the name of an existing service account to be associated with gocd agents
     # If field is empty, the service account "default" will be used.
     name:
+    automountServiceAccountToken: false
 
   # agent.deployment.labels is the labels for the GoCD Agent Deployment
   deployment:

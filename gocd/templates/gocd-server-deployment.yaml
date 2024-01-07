@@ -45,6 +45,7 @@ spec:
         fsGroup: {{ .Values.server.securityContext.fsGroup }}
         fsGroupChangePolicy: {{ .Values.server.securityContext.fsGroupChangePolicy }}
       serviceAccountName: {{ template "gocd.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       {{- if or .Values.server.shouldPreconfigure (or .Values.server.persistence.enabled (or .Values.server.security.ssh.enabled .Values.server.persistence.extraVolumes)) }}
       volumes:
       {{- end }}

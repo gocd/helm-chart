@@ -41,6 +41,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ template "gocd.agentServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.agent.serviceAccount.automountServiceAccountToken }}
       securityContext:
         runAsUser: {{ .Values.agent.securityContext.runAsUser }}
         runAsGroup: {{ .Values.agent.securityContext.runAsGroup }}

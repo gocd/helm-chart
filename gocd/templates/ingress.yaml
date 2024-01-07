@@ -1,5 +1,4 @@
-{{- if .Values.server.enabled }}
-{{- if .Values.server.ingress.enabled -}}
+{{- if and .Values.server.enabled .Values.server.ingress.enabled -}}
 {{- $extraPaths := .Values.server.ingress.extraPaths -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -48,5 +47,4 @@ spec:
   tls:
 {{ toYaml .Values.server.ingress.tls | indent 4 }}
   {{- end -}}
-{{- end -}}
 {{- end -}}

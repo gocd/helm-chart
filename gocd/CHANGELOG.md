@@ -1,3 +1,13 @@
+### 2.6.0
+* Upgrades the elastic agent plugin to `v4`, which enables auto-configuration and auto-refresh of service account tokens
+  when installed via this Helm chart. If you run your server in namespace `xxx` but rely on the plugin to create pods in
+  the `default` namespace, you will need to set the namespace in your elastic profiles to `default` before upgrading.
+  See [v4.0.0-505](https://github.com/gocd/kubernetes-elastic-agents/releases/tag/v4.0.0-505).
+* For new servers, the default elastic agent profiles are no longer privileged, and use the same image as the Helm chart
+  rather than the `dind` image. Since Kubernetes no longer defaults to use of dockerd, it no longer makes sense to default
+  or suggest dind images as elastic agent images. 
+* Preconfigure script config map is no longer installed during an agent-only installation.
+* Agent service account tokens are no longer auto-mounted into pods by default.
 ### 2.5.2
 * Bump elastic agent plugin to [v3.9.1-501](https://github.com/gocd/kubernetes-elastic-agents/releases/tag/v3.9.1-501)
 ### 2.5.1
