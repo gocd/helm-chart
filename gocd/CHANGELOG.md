@@ -1,3 +1,5 @@
+### 2.6.1
+* Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.6.0
 * Upgrades the elastic agent plugin to `v4`, which enables auto-configuration and auto-refresh of service account tokens
   when installed via this Helm chart. If you run your server in namespace `xxx` but rely on the plugin to create pods in
