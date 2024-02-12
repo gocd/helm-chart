@@ -1,6 +1,9 @@
 # GoCD Helm Chart
 
-[![Join the chat at https://gitter.im/gocd/gocd](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gocd/gocd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Google Groups](https://img.shields.io/badge/Google_Groups-user_help-purple)](https://groups.google.com/g/go-cd)
+[![GitHub Discussions](https://img.shields.io/badge/GitHub_discussions-user_&amp;_dev_chat-green)](https://github.com/gocd/gocd/discussions)
+[![GitHub License](https://img.shields.io/github/license/gocd/gocd?color=yellow)](LICENSE)
+[![Server Docker Pulls](https://img.shields.io/docker/pulls/gocd/gocd-server?label=Server%20Docker%20pulls)](https://hub.docker.com/r/gocd/gocd-server/)
 
 [GoCD](https://www.gocd.org/) is an open-source continuous delivery server to model and visualize complex workflow with ease.
 
