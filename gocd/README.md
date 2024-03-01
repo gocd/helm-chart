@@ -457,8 +457,8 @@ A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in th
 | Parameter                | Description                                                                                               | Default                                          |
 |--------------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
 | `tests.enabled`          | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                                          |
-| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:1.8.2`                                |
-| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/containeroo/alpine-toolbox:2.0.20` |
+| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:tag`                                |
+| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/containeroo/alpine-toolbox:tag` |
 | `tests.imagePullSecrets` | Image pull secrets for private registries                                                                 | `[]`                                             |
 
 # Adding plugins
