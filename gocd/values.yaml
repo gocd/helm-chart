@@ -454,7 +454,7 @@ tests:
   # Without the resources being created the tests will not work; however the installation is cleaner.
   enabled: false
   # A BATS image to supply test runner, see https://hub.docker.com/r/bats/bats/tags
-  batsImage: "bats/bats:v1.10.0"
+  batsImage: "bats/bats:v1.11.0"
   # A image containing bash, curl and busybox|coreutils for executing tests, see https://github.com/containeroo/alpine-toolbox/releases
   curlImage: "ghcr.io/containeroo/alpine-toolbox:2.0.67"
   # Specify an array of imagePullSecrets to pull from private registries
