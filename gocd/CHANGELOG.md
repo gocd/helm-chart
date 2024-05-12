@@ -1,3 +1,4 @@
+* Update default agent image to gocd-agent-wolfi
 ### 2.6.2
 * Bump pre-installed plugins and chart test images to latest patched versions (thanks to @chadlwilson)
 ### 2.6.1
