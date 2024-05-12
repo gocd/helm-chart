@@ -1,4 +1,5 @@
 * Update default agent image to gocd-agent-wolfi
+* Update kubernetes elastic agent plugin to [v4.1.0-539](https://github.com/gocd/kubernetes-elastic-agents/releases/tag/v4.1.0-539)
 ### 2.6.2
 * Bump pre-installed plugins and chart test images to latest patched versions (thanks to @chadlwilson)
 ### 2.6.1
