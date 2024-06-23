@@ -1,3 +1,5 @@
+### 2.8.0
+* [76329cd](https://github.com/gocd/helm-chart/commit/76329cd): Bump up GoCD Version to 24.2.0
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.7.1
 * Update kubernetes elastic agent plugin to [v4.1.0.541](https://github.com/gocd/kubernetes-elastic-agents/releases/tag/v4.1.0-541))
