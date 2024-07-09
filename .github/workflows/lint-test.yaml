@@ -18,7 +18,7 @@ jobs:
       matrix:
         k8s: # See https://hub.docker.com/r/kindest/node/tags for valid tags
           # For relevant EOLs https://endoflife.date/kubernetes / https://endoflife.date/amazon-eks / https://endoflife.date/azure-kubernetes-service / https://endoflife.date/google-kubernetes-engine
-          - v1.30.0  # EOL 2025-06-28 (latest 2025-07-25 for EKS)
+          - v1.30.2  # EOL 2025-06-28 (latest 2025-07-25 for EKS)
           - v1.29.4  # EOL 2025-02-28 (latest 2025-03-23 for EKS)
           - v1.28.9  # EOL 2024-10-28 (latest 2024-11-30 for AKS)
           - v1.27.13 # EOL 2024-06-28 (latest 2024-08-31 for GKE)
