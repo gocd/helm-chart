@@ -16,7 +16,7 @@ To quickly build your first pipeline while learning key GoCD concepts, visit the
 ## Prerequisites
 
 - Helm 3
-- Kubernetes 1.20+
+- Kubernetes 1.20+ (we actively test against all versions in active (non-extended) support by cloud providers) 
 - PV provisioner support in the underlying infrastructure
 - LoadBalancer support or Ingress Controller
 
@@ -45,9 +45,12 @@ Please see [CHANGELOG.md](./CHANGELOG.md).
 [Artifact Hub](https://artifacthub.io/packages/helm/gocd/gocd) uses [Trivy](https://github.com/aquasecurity/trivy) to 
 assess and report [potential vulnerabilities](https://artifacthub.io/packages/helm/gocd/gocd?modal=security-report) from
 the default server and agent images present within the chart, including Java dependencies that are part of GoCD components.
-While this may change over time, it is likely that these reported vulnerabilities do not affect GoCD's usage of these 
-libraries/frameworks. You can review the team's [assessment and suppressions here](https://github.com/gocd/gocd/blob/master/buildSrc/dependency-check-suppress.xml) if you would like to propagate these suppressions to
-your own environment.
+While this may change over time, many reported vulnerabilities are false positives and do not affect GoCD's usage of these 
+libraries/frameworks and the true risk. Since ArtifactHub does not provide a way to propagate suppressions or provide
+maintainer assessments to users, scanning has been disabled. 
+
+If your own scans surface these potential vulnerabilities, you can review the team's [assessment and suppressions here](https://github.com/gocd/gocd/blob/master/build-platform/dependency-check-suppress.xml)
+and consider propagating these suppressions to your own tooling.
 
 More generally, please consult GoCD's [security policy here](https://github.com/gocd/gocd/blob/master/SECURITY.md).
 
