@@ -22,7 +22,6 @@ jobs:
           - v1.30.3  # EOL latest 2025-07-23 for EKS
           - v1.29.7  # EOL latest 2025-03-23 for EKS
           - v1.28.12 # EOL latest 2025-02-04 for GKE
-          - v1.27.16 # EOL latest 2024-08-31 for GKE
     steps:
       - name: Checkout
         uses: actions/checkout@v4
