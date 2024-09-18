@@ -1,3 +1,5 @@
+### 2.9.2
+* Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.9.1
 * Bump chart test images to latest patched versions (thanks to @chadlwilson)
 ### 2.9.0
