@@ -105,9 +105,9 @@ spec:
             - name: AGENT_AUTO_REGISTER_HOSTNAME
               value: {{ .Values.agent.env.agentAutoRegisterHostname }}
             {{- end }}
-            {{- if .Values.agent.env.goAgentJvmOpts }}
+            {{- if or .Values.agent.healthCheck.enabled .Values.agent.env.goAgentJvmOpts }}
             - name: GOCD_AGENT_JVM_OPTS
-              value: {{ .Values.agent.env.goAgentJvmOpts }}
+              value: {{ if .Values.agent.healthCheck.enabled }}-Dgo.agent.status.api.bind.host=0.0.0.0{{ end }} {{ .Values.agent.env.goAgentJvmOpts }}
             {{- end }}
             {{- if .Values.agent.env.goAgentBootstrapperJvmArgs }}
             - name: AGENT_BOOTSTRAPPER_JVM_ARGS

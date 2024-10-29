@@ -1,3 +1,5 @@
+### 2.9.3
+* Ensure agent is listening on correct interface when health check enabled (thanks to @chadlwilson and @12345ieee)
 ### 2.9.2
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.9.1
