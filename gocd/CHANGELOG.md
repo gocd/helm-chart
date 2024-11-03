@@ -1,3 +1,5 @@
+### 2.10.0
+* [aa45b5f](https://github.com/gocd/helm-chart/commit/aa45b5f): Bump up GoCD Version to 24.4.0
 ### 2.9.3
 * Ensure agent is listening on correct interface when health check enabled (thanks to @chadlwilson and @12345ieee)
 ### 2.9.2
