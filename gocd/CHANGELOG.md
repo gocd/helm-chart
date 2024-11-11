@@ -1,3 +1,5 @@
+### 2.10.1
+* Switch to a Chainguard bash image for testing (thanks to @chadlwilson)
 ### 2.10.0
 * [aa45b5f](https://github.com/gocd/helm-chart/commit/aa45b5f): Bump up GoCD Version to 24.4.0
 ### 2.9.3

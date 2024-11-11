@@ -374,15 +374,13 @@ agent:
         subPath: kubectl
   initContainers:
     - name: download-kubectl
-      image: "ghcr.io/containeroo/alpine-toolbox:latest"
+      image: "cgr.dev/chainguard/bash:latest"
       imagePullPolicy: "IfNotPresent"
       volumeMounts:
         - name: kubectl
           mountPath: /download
       workingDir: /download
-      command: ["/bin/bash"]
       args:
-        - "-c"
         - 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl'
 u
 ```
@@ -457,12 +455,12 @@ Possible states:
 
 A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in this chart. To avoid creating misleading or unused resources in your clusters, the resources required to use `helm test` are not created by default in chart version `1.39.6+` and must be enabled as below.
 
-| Parameter                | Description                                                                                               | Default                                          |
-|--------------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------|
-| `tests.enabled`          | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                                          |
-| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:tag`                                |
-| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `ghcr.io/containeroo/alpine-toolbox:tag` |
-| `tests.imagePullSecrets` | Image pull secrets for private registries                                                                 | `[]`                                             |
+| Parameter                | Description                                                                                               | Default                           |
+|--------------------------|-----------------------------------------------------------------------------------------------------------|-----------------------------------|
+| `tests.enabled`          | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                           |
+| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:tag`                   |
+| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `cgr.dev/chainguard/bash:latest`  |
+| `tests.imagePullSecrets` | Image pull secrets for private registries                                                                 | `[]`                              |
 
 # Adding plugins
 
