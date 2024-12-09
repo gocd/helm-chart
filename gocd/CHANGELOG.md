@@ -1,3 +1,4 @@
+* Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.10.1
 * Switch to a Chainguard bash image for testing (thanks to @chadlwilson)
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
