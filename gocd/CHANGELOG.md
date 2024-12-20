@@ -1,3 +1,5 @@
+### 2.11.0
+* [667e2e1](https://github.com/gocd/helm-chart/commit/667e2e1): Bump up GoCD Version to 24.5.0
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.10.1
 * Switch to a Chainguard bash image for testing (thanks to @chadlwilson)
