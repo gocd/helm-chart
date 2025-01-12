@@ -1,6 +1,6 @@
-{{- if and .Values.agent.persistence.enabled (not .Values.agent.persistence.existingClaim) -}}
-kind: PersistentVolumeClaim
+{{- if and .Values.agent.enabled .Values.agent.persistence.enabled (not .Values.agent.persistence.existingClaim) -}}
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: {{ template "gocd.fullname" . }}-agent
   labels:
