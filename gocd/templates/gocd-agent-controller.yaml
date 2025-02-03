@@ -1,5 +1,6 @@
+{{- if .Values.agent.enabled -}}
 apiVersion: apps/v1
-kind: Deployment
+kind: {{ .Values.agent.controller.kind }}
 metadata:
   name: {{ template "gocd.fullname" . }}-agent
   labels:
@@ -8,18 +9,30 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
     component: agent
-    {{- with .Values.agent.deployment.labels }}
+    {{- with .Values.agent.controller.labels }}
 {{ toYaml . | indent 4 }}
     {{- end }}
   annotations:
-  {{- range $key, $value := .Values.agent.annotations.deployment }}
+  {{- range $key, $value := .Values.agent.controller.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
+  {{- if (eq .Values.agent.controller.kind "StatefulSet") }}
+  serviceName: {{ template "gocd.fullname" . }}-agent
+  {{- end }}
+  {{- if not (eq .Values.agent.controller.kind "DaemonSet") }}
   replicas: {{ .Values.agent.replicaCount }}
-  {{- if .Values.agent.deployStrategy }}
+  {{- end }}
+  {{- with .Values.agent.controllerStrategy }}
+  {{- if (eq .Values.agent.controller.kind "Deployment") }}
   strategy:
-{{ toYaml .Values.agent.deployStrategy | indent 4 }}
+  {{- else }}
+  updateStrategy:
+  {{- end }}
+{{ toYaml . | indent 4 }}
+  {{- end }}
+  {{- if (eq .Values.agent.controller.kind "StatefulSet") }}
+  podManagementPolicy: Parallel
   {{- end }}
   selector:
     matchLabels:
@@ -36,7 +49,7 @@ spec:
 {{ toYaml . | indent 8 }}
         {{- end }}
       annotations:
-      {{- range $key, $value := .Values.agent.annotations.pod }}
+      {{- range $key, $value := .Values.agent.pod.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
@@ -82,6 +95,9 @@ spec:
           resources:
 {{ toYaml .Values.agent.resources | indent 12 }}
           env:
+            {{- with .Values.agent.env.extraEnvVars }}
+{{ toYaml . | indent 12 }}
+            {{- end }}
             - name: GO_SERVER_URL
             {{- if .Values.agent.env.goServerUrl }}
               value: {{ .Values.agent.env.goServerUrl }}
@@ -116,9 +132,6 @@ spec:
             {{- if .Values.agent.env.goAgentBootstrapperArgs }}
             - name: AGENT_BOOTSTRAPPER_ARGS
               value: {{ .Values.agent.env.goAgentBootstrapperArgs }}
-            {{- end }}
-            {{- if .Values.agent.env.extraEnvVars }}
-{{ toYaml .Values.agent.env.extraEnvVars | indent 12 }}
             {{- end }}
           {{- if .Values.agent.healthCheck.enabled }}
           livenessProbe:
@@ -190,3 +203,8 @@ spec:
       hostAliases:
 {{ toYaml .Values.agent.hostAliases | indent 8 }}
     {{- end }}
+{{- if and (eq .Values.agent.controller.kind "StatefulSet") .Values.agent.persistence.claimTemplates }}
+  volumeClaimTemplates:
+{{ toYaml .Values.agent.persistence.claimTemplates | indent 4 }}
+{{- end }}
+{{- end -}}
