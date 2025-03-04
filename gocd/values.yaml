@@ -255,6 +255,11 @@ server:
       defaultMode:
 
 agent:
+  # agent.enabled is the toggle to deploy static GoCD Agents. Change to false for Server Only Deployment.
+  enabled: true
+  # agent.kind is the type of controller used to deploy Agents. Use either Deployment (default), StatefulSet or DaemonSet
+  kind: "Deployment"
+
   # specifies overrides for agent specific service account creation
   serviceAccount:
     # specifies whether the top level service account (also used by the server) should be reused as the service account for gocd agents
@@ -262,6 +267,7 @@ agent:
     # if reuseTopLevelServiceAccount is false, this field specifies the name of an existing service account to be associated with gocd agents
     # If field is empty, the service account "default" will be used.
     name:
+    # agent.serviceAccount.automountServiceAccountToken specifies whether to automount the service account token in the GoCD Agent pods
     automountServiceAccountToken: false
 
   # agent.deployment.labels is the labels for the GoCD Agent Deployment
@@ -298,10 +304,13 @@ agent:
   # postStart:
   #  - "/bin/bash"
   #  - "/agent_startup.sh"
-  # agent.deployStrategy is the strategy explained in detail at https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   # agent.terminationGracePeriodSeconds is the optional duration in seconds the gocd agent pods need to terminate gracefully.
   # Note: SIGTERM is issued immediately after the pod deletion request is sent. If the pod doesn't terminate, k8s waits for terminationGracePeriodSeconds before issuing SIGKILL.
   # terminationGracePeriodSeconds: 60
+  # agent.deployStrategy depends on the controller kind, for deployments it's:
+  # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  # and for StatefulSets it's:
+  # https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   deployStrategy: {}
   image:
     # agent.image.repository is the GoCD Agent image name
@@ -370,8 +379,22 @@ agent:
     #     secretName: github-key
     #     defaultMode: 0744
 
+    # agent.persistence.volumeClaimTemplates additional volumes dedicated to each replica
+    # when deployed as a StatefulSet
+    volumeClaimTemplates: []
+    # - metadata:
+    #     name: godata
+    #   spec:
+    #     accessModes: ["ReadWriteOnce"]
+    #     resources:
+    #       requests:
+    #         storage: 1Gi
+    #     storageClassName: storageClassName
+
     # agent.persistence.extraVolumeMounts additional agent volumeMounts
     extraVolumeMounts: []
+    # - name: godata
+    #   mountPath: /godata
     # - name: github-key
     #   mountPath: /etc/config/keys/
     #   readOnly: true

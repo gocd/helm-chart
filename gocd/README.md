@@ -74,7 +74,7 @@ The following tables list the configurable parameters of the GoCD chart and thei
 |----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
 | `server.enabled`                             | Enable GoCD Server. Supported values are `true`, `false`. When enabled, the GoCD server deployment is done on helm install.                          | `true`                                     |
 | `server.annotations.deployment`              | GoCD server Deployment annotations.                                                                                                                  | `{}`                                       |
-| `server.annotations.pod       `              | GoCD server Pod annotations.                                                                                                                         | `{}`                                       |
+| `server.annotations.pod`                     | GoCD server Pod annotations.                                                                                                                         | `{}`                                       |
 | `server.shouldPreconfigure`                  | Preconfigure GoCD Server to have a default elastic agent profile and Kubernetes elastic agent plugin settings. Supported values are `true`, `false`. | `true`                                     |
 | `server.preconfigureCommand`                 | Preconfigure GOCD Server with a custom command (shell,python, etc ...). Supported value is a list.                                                   | `["/bin/bash", "/preconfigure_server.sh"]` |
 | `server.preStop`                             | Perform cleanup and backup before stopping the gocd server. Supported value is a list.                                                               | `nil`                                      |
@@ -178,13 +178,17 @@ $ kubectl create secret generic gocd-server-ssh \
 
 | Parameter                                   | Description                                                                                                                                                                      | Default                 |
 |---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| `agent.enabled`                             | Enable GoCD Agents. Supported values are `true`, `false`.                                                                                                                        | `true`                  |
+| `agent.kind`                                | Controller used to deploy GoCD Agents. Use either `Deployment` (default), `StatefulSet` or `DaemonSet`.                                                                          | `Deployment`            |
+| `agent.deployment.labels`                   | GoCD Agent Deployment labels.                                                                                                                                                    | `{}`                    |
+| `agent.pod.labels`                          | GoCD Agent Pod labels.                                                                                                                                                           | `{}`                    |
 | `agent.annotations.deployment`              | GoCD Agent Deployment annotations.                                                                                                                                               | `{}`                    |
-| `agent.annotations.pod       `              | GoCD Agent Pod annotations.                                                                                                                                                      | `{}`                    |
+| `agent.annotations.pod`                     | GoCD Agent Pod annotations.                                                                                                                                                      | `{}`                    |
 | `agent.replicaCount`                        | GoCD Agent replicas Count. By default, no agents are provided.                                                                                                                   | `0`                     |
-| `agent.preStop        `                     | Perform cleanup and backup before stopping the gocd server. Supported value is a list.                                                                                           | `nil`                   |
+| `agent.preStop`                             | Perform cleanup and backup before stopping the gocd server. Supported value is a list.                                                                                           | `nil`                   |
 | `agent.postStart`                           | Commands to run after agent startup.                                                                                                                                             | `nil`                   |
 | `agent.terminationGracePeriodSeconds`       | Optional duration in seconds the gocd agent pods need to terminate gracefully.                                                                                                   | `nil`                   |
-| `agent.deployStrategy`                      | GoCD Agent [deployment strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).                                                                | `{}`                    |
+| `agent.deployStrategy`                      | GoCD Agent [Deployment strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) or update strategy for StatefulSet/DaemonSet.                   | `{}`                    |
 | `agent.image.repository`                    | GoCD agent image                                                                                                                                                                 | `gocd/gocd-agent-wolfi` |
 | `agent.image.tag`                           | GoCD agent image tag                                                                                                                                                             | `.Chart.appVersion`     |
 | `agent.image.pullPolicy`                    | Image pull policy                                                                                                                                                                | `IfNotPresent`          |
@@ -268,7 +272,7 @@ The value pvSelector must be specified so that the right persistence volume will
 2. Create the PersistentVolumeClaim
 3. Install the chart
 
-```
+```bash
 $ helm install --name gocd_app --set server.persistence.existingClaim=PVC_NAME stable/gocd
 ```
 
@@ -277,7 +281,7 @@ $ helm install --name gocd_app --set server.persistence.existingClaim=PVC_NAME s
 Additional volumes, such as `ConfigMaps` and `secrets`, can be mounted on the server and agent deployments.
 
 To mount a `secret`:
-```
+```yaml
   persistence:
     enabled: true
     extraVolumeMounts:
@@ -292,7 +296,7 @@ To mount a `secret`:
 ```
 
 To mount a `ConfigMap` containing `/docker-entrypoint.d/` scripts:
-```
+```yaml
   persistence:
     enabled: true
     name:
@@ -344,11 +348,13 @@ property for your GoCD agents if necessary), further [documented here](https://k
 | `agent.persistence.accessMode`               | The PVC access mode                                     | `ReadWriteOnce` |
 | `agent.persistence.size`                     | The size of the PVC                                     | `1Gi`           |
 | `agent.persistence.storageClass`             | The PVC storage class name                              | `nil`           |
-| `agent.persistence.pvSelector`               | The godata Persistence Volume Selectors                 | `nil`           |
+| `agent.persistence.existingClaim`            | Name of an existing PVC for gohome                      | `nil`           |
+| `agent.persistence.pvSelector`               | The gohome Persistence Volume Selectors                 | `nil`           |
 | `agent.persistence.name.dockerEntryPoint`    | The Persitence Volume to mount at /docker-entrypoint.d/ | `goagent-vol`   |
 | `agent.persistence.subpath.homego`           | The /home/go path on Persistence Volume                 | `homego`        |
 | `agent.persistence.subpath.dockerEntryPoint` | The /docker-entrypoint.d path on Persistence Volume     | `scripts`       |
 | `agent.persistence.extraVolumes`             | Additional agent volumes                                | `[]`            |
+| `agent.persistence.volumeClaimTemplates`     | Additional claim templates, if using a StatefulSet      | `[]`            |
 | `agent.persistence.extraVolumeMounts`        | Additional agent volumeMounts                           | `[]`            |
 
 ##### Note:
@@ -358,11 +364,38 @@ property for your GoCD agents if necessary), further [documented here](https://k
 1. That packages being cached here is shared between all the agents.
 2. That all the agents sharing this directory are privy to all the secrets in `/home/go`
 
+#### Achieve static agent identity persistence
+
+To persist the identity of an agent when the pod restarts, one needs to have the `/godata/config` to be hosted on a mount point.  
+If multiple agents need to be deployed, the best way to achieve it is to use the `volumeClaimTemplate` feature of `StatefulSet`,
+then mounting the PVC at (or above) that path.
+
+Mounting the whole `/godata` also allows the pipelines and logs to be persisted, below is an example setup:
+
+```yaml
+agent:
+  controller:
+    kind: "StatefulSet"
+  persistence:
+    volumeClaimTemplates:
+      - metadata:
+          name: godata
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: SIZE
+          storageClassName: NAME
+    extraVolumeMounts:
+      - name: godata
+        mountPath: /godata
+```
+
 ## Init containers
 
 The GoCD helm chart supports specifying init containers for server and agents. This can for example be used to download `kubectl` or any other necessary ressources before starting GoCD:
 
-```
+```yaml
 agent:
   persistence:
     extraVolumes:
@@ -382,7 +415,6 @@ agent:
       workingDir: /download
       args:
         - 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl'
-u
 ```
 
 Depending on how long the init containers take to complete, it might be necessary to tweak the values of `server.healthCheck.initialDelaySeconds` or `agent.healthCheck.initialDelaySeconds`.
@@ -419,11 +451,10 @@ If RBAC is enabled,
 If `rbac.create=false`, the service account that will be used, either the default or one that's created, will not have the cluster scope or pod privileges to use with the Kubernetes EA plugin.
 A cluster role binding must be created like below:
 
-```
+```bash
 kubectl create clusterrolebinding clusterRoleBinding \
 --clusterrole=CLUSTER_ROLE_WITH_NECESSARY_PRIVILEGES \
 --serviceaccount=NAMESPACED_SERVICE_ACCOUNT
-
 ```
 
 #### Existing role references:
@@ -438,10 +469,11 @@ helm install --namespace gocd --name gocd_app --set rbac.roleRef=ROLE_NAME stabl
 
 Service account can be configured specifically for agents. This configuration also allows for the reuse of the top level service account that is used to configure the server pod. The various settings and their possible states are described below:
 
-| Parameter                                          | Description                                                                                                                                                                                                              | Default   |
-|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| `agent.serviceAccount.reuseTopLevelServiceAccount` | Specifies whether the top level service account (also used by the server) should be reused as the service account for gocd agents                                                                                        | false     |
-| `agent.serviceAccount.name`                        | If reuseTopLevelServiceAccount is false, this field specifies the name of an existing service account to be associated with gocd agents. By default (name field is empty), no service account is created for gocd agents | `nil`     |
+| Parameter                                           | Description                                                                                                                                                                                                              | Default   |
+|-----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
+| `agent.serviceAccount.reuseTopLevelServiceAccount`  | Specifies whether the top level service account (also used by the server) should be reused as the service account for gocd agents                                                                                        | false     |
+| `agent.serviceAccount.name`                         | If reuseTopLevelServiceAccount is false, this field specifies the name of an existing service account to be associated with gocd agents. By default (name field is empty), no service account is created for gocd agents | `nil`     |
+| `agent.serviceAccount.automountServiceAccountToken` | Specifies whether to automount the service account token in the GoCD Agent pods                                                                                                                                          | false     |
 
 Possible states:
 
@@ -467,7 +499,7 @@ A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in th
 - Add the .jar file link from the releases section in the plugin's repo to the env.extraEnvVars section as a new environment variable.
 The environment variable name must have GOCD_PLUGIN_INSTALL prefixed to it like the following section
 
-```
+```yaml
 env:
   extraEnvVars:
     - name: GOCD_PLUGIN_INSTALL_email-notifier
@@ -487,15 +519,15 @@ You can secure an Ingress by specifying a `secret` that contains a TLS private k
 Please refer to [Ingress documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) about how to configure TLS.
 Many ingress controllers make configuring TLS easy with the use of annotations. You can use ingress annotations to configure some of the TLS parameters like a managed SSL certificate, redirecting http to https, etc.
 
-| Parameter                                   | Description                                                                                   |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------|
-| ingress.kubernetes.io/force-ssl-redirect	  | Redirect non-TLS requests to TLS even when TLS is not configured.                             |
-| kubernetes.io/ingress.allow-http            | Whether to accept non-TLS HTTP connections. Supported on GCE. Default: true                   |
-| alb.ingress.kubernetes.io/backend-protocol  | Specifies the protocol used when route traffic to pods on EKS.                                |
-| ingress.kubernetes.io/proxy-pass-params     | Parameters for proxy-pass directives.                                                         |
-| kubernetes.io/ingress.global-static-ip-name | Name of the static global IP address in GCP to use when provisioning the HTTPS load balancer. |
-| networking.gke.io/managed-certificates      | Name of the ManagedCertificate on GCP                                                         |
-| alb.ingress.kubernetes.io/certificate-arn   | Certificate arn on AWS Cert Manager                                                           |
+| Parameter                                     | Description                                                                                   |
+|-----------------------------------------------|-----------------------------------------------------------------------------------------------|
+| `ingress.kubernetes.io/force-ssl-redirect`    | Redirect non-TLS requests to TLS even when TLS is not configured.                             |
+| `kubernetes.io/ingress.allow-http`            | Whether to accept non-TLS HTTP connections. Supported on GCE. Default: true                   |
+| `alb.ingress.kubernetes.io/backend-protocol`  | Specifies the protocol used when route traffic to pods on EKS.                                |
+| `ingress.kubernetes.io/proxy-pass-params`     | Parameters for proxy-pass directives.                                                         |
+| `kubernetes.io/ingress.global-static-ip-name` | Name of the static global IP address in GCP to use when provisioning the HTTPS load balancer. |
+| `networking.gke.io/managed-certificates`      | Name of the ManagedCertificate on GCP                                                         |
+| `alb.ingress.kubernetes.io/certificate-arn`   | Certificate arn on AWS Cert Manager                                                           |
 
 Popular managed Kubernetes offerings like GKE, EKS, AKS etc provide a default ingress controller which supports many more annotations.
 
