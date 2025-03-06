@@ -24,7 +24,7 @@ spec:
   replicas: {{ .Values.agent.replicaCount }}
   {{- end }}
   {{- with .Values.agent.deployStrategy }}
-  {{- if (eq .Values.agent.kind "Deployment") }}
+  {{- if (eq $.Values.agent.kind "Deployment") }}
   strategy:
   {{- else }}
   updateStrategy:
