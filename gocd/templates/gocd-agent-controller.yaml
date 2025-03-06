@@ -1,5 +1,6 @@
+{{- if .Values.agent.enabled -}}
 apiVersion: apps/v1
-kind: Deployment
+kind: {{ .Values.agent.kind }}
 metadata:
   name: {{ template "gocd.fullname" . }}-agent
   labels:
@@ -16,10 +17,22 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
+  {{- if (eq .Values.agent.kind "StatefulSet") }}
+  serviceName: {{ template "gocd.fullname" . }}-agent
+  {{- end }}
+  {{- if not (eq .Values.agent.kind "DaemonSet") }}
   replicas: {{ .Values.agent.replicaCount }}
-  {{- if .Values.agent.deployStrategy }}
+  {{- end }}
+  {{- with .Values.agent.deployStrategy }}
+  {{- if (eq $.Values.agent.kind "Deployment") }}
   strategy:
-{{ toYaml .Values.agent.deployStrategy | indent 4 }}
+  {{- else }}
+  updateStrategy:
+  {{- end }}
+{{ toYaml . | indent 4 }}
+  {{- end }}
+  {{- if (eq .Values.agent.kind "StatefulSet") }}
+  podManagementPolicy: Parallel
   {{- end }}
   selector:
     matchLabels:
@@ -190,3 +203,8 @@ spec:
       hostAliases:
 {{ toYaml .Values.agent.hostAliases | indent 8 }}
     {{- end }}
+{{- if and (eq .Values.agent.kind "StatefulSet") .Values.agent.persistence.volumeClaimTemplates }}
+  volumeClaimTemplates:
+{{ toYaml .Values.agent.persistence.volumeClaimTemplates | indent 4 }}
+{{- end }}
+{{- end -}}

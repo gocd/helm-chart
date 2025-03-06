@@ -1,3 +1,5 @@
+### 2.13.0
+* Add support for modelling static agents as StatefulSets (thanks to @12345ieee)
 ### 2.12.1
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.12.0
