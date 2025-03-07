@@ -1,3 +1,5 @@
+### 2.13.1
+* Populate additional ArtifactHub annotations (thanks to @chadlwilson)
 ### 2.13.0
 * Add support for modelling static agents as StatefulSets (thanks to @12345ieee)
 ### 2.12.1
