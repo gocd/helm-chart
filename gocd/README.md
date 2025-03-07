@@ -553,7 +553,7 @@ GoCD agents outside of the Kubernetes cluster may connect to the GoCD server via
 # License
 
 ```plain
-Copyright 2022 Thoughtworks, Inc.
+Copyright Thoughtworks, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
