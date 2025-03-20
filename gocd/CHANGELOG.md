@@ -1,3 +1,5 @@
+### 2.13.2
+* Improve ArtifactHub annotations (thanks to @chadlwilson)
 ### 2.13.1
 * Populate additional ArtifactHub annotations (thanks to @chadlwilson)
 ### 2.13.0

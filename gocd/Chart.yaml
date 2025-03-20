@@ -1,7 +1,7 @@
 apiVersion: v1
 name: gocd
 home: https://www.gocd.org/
-version: 2.13.1
+version: 2.13.2
 appVersion: 25.1.0
 description: GoCD is an open-source continuous delivery server to model and visualize complex workflows with ease.
 icon: https://gocd.github.io/assets/images/go-icon-black-192x192.png
@@ -15,8 +15,8 @@ keywords:
   - continuous-deployment
   - continuous-testing
 sources:
-  - https://github.com/gocd/gocd
-  - https://github.com/gocd/helm-chart/gocd
+  - https://github.com/gocd/gocd/tree/25.1.0
+  - https://github.com/gocd/helm-chart/tree/gocd-2.13.2/gocd
 maintainers:
   - name: chadlwilson
     email: chadw@thoughtworks.com
@@ -31,7 +31,7 @@ annotations:
       platforms:
         - linux/amd64
         - linux/arm64
-    - name: gocd-agent (optional)
+    - name: gocd-agent-wolfi (optional)
       image: gocd/gocd-agent-wolfi:25.1.0
       platforms:
         - linux/amd64
