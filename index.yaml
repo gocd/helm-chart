@@ -17,6 +17,49 @@ entries:
       artifacthub.io/license: Apache-2.0
     apiVersion: v1
     appVersion: 25.2.0
+    created: "2025-05-03T18:24:38.407005461Z"
+    description: GoCD is an open-source continuous delivery server to model and visualize
+      complex workflows with ease.
+    digest: a4b87ae0158cd1bb256d4741f349fad8efe689e086bd9a4f71cc32e012e04380
+    home: https://www.gocd.org/
+    icon: https://gocd.github.io/assets/images/go-icon-black-192x192.png
+    keywords:
+    - gocd
+    - ci
+    - cd
+    - ci/cd
+    - continuous-integration
+    - continuous-delivery
+    - continuous-deployment
+    - continuous-testing
+    maintainers:
+    - email: chad.lee.wilson@gmail.com
+      name: chadlwilson
+    - email: arvind@thoughtworks.com
+      name: arvindsv
+    name: gocd
+    sources:
+    - https://github.com/gocd/gocd/tree/25.2.0
+    - https://github.com/gocd/helm-chart/tree/gocd-2.14.0/gocd
+    urls:
+    - https://github.com/gocd/helm-chart/releases/download/gocd-2.14.1/gocd-2.14.1.tgz
+    version: 2.14.1
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/images: |
+        - name: gocd-server
+          image: gocd/gocd-server:25.2.0
+          platforms:
+            - linux/amd64
+            - linux/arm64
+        - name: gocd-agent-wolfi (optional)
+          image: gocd/gocd-agent-wolfi:25.2.0
+          platforms:
+            - linux/amd64
+            - linux/arm64
+      artifacthub.io/license: Apache-2.0
+    apiVersion: v1
+    appVersion: 25.2.0
     created: "2025-04-27T17:10:54.399845996Z"
     description: GoCD is an open-source continuous delivery server to model and visualize
       complex workflows with ease.
@@ -5010,4 +5053,4 @@ entries:
     urls:
     - https://github.com/gocd/helm-chart/releases/download/1.0.0/gocd-1.0.0.tgz
     version: 1.0.0
-generated: "2025-04-27T17:10:54.400358888Z"
+generated: "2025-05-03T18:24:38.407405698Z"
