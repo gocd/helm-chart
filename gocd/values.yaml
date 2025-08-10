@@ -104,7 +104,7 @@ server:
   # specify init containers, e.g. to prepopulate home directories etc
   initContainers: []
   #  - name: download-kubectl
-  #    image: "cgr.dev/chainguard/bash:latest"
+  #    image: "chainguard/bash:latest"
   #    imagePullPolicy: "IfNotPresent"
   #    volumeMounts:
   #      - name: kubectl
@@ -404,7 +404,7 @@ agent:
   # specify init containers, e.g. to prepopulate home directories etc
   initContainers: []
   #  - name: download-kubectl
-  #    image: "cgr.dev/chainguard/bash:latest"
+  #    image: "chainguard/bash:latest"
   #    imagePullPolicy: "IfNotPresent"
   #    volumeMounts:
   #      - name: kubectl
@@ -475,7 +475,7 @@ tests:
   # A BATS image to supply test runner, see https://hub.docker.com/r/bats/bats/tags
   batsImage: "bats/bats:1.11.1"
   # A image containing bash, curl and busybox|coreutils for executing tests, see https://images.chainguard.dev/directory/image/bash/overview
-  curlImage: "cgr.dev/chainguard/bash:latest"
+  curlImage: "chainguard/bash:latest"
   # Specify an array of imagePullSecrets to pull from private registries
   # You need to manually create secrets in the namespace
   # See https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
