@@ -473,7 +473,7 @@ tests:
   # Without the resources being created the tests will not work; however the installation is cleaner.
   enabled: false
   # A BATS image to supply test runner, see https://hub.docker.com/r/bats/bats/tags
-  batsImage: "bats/bats:1.11.1"
+  batsImage: "bats/bats:1.12.0"
   # A image containing bash, curl and busybox|coreutils for executing tests, see https://images.chainguard.dev/directory/image/bash/overview
   curlImage: "chainguard/bash:latest"
   # Specify an array of imagePullSecrets to pull from private registries
