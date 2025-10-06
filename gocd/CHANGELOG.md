@@ -1,3 +1,5 @@
+### 2.15.2
+* Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.15.1
 * Bump pre-installed plugins to latest patched versions (thanks to @chadlwilson)
 ### 2.15.0
