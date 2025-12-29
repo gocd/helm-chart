@@ -16,7 +16,7 @@ keywords:
   - continuous-testing
 sources:
   - https://github.com/gocd/gocd/tree/25.3.0
-  - https://github.com/gocd/helm-chart/tree/gocd-2.16.0/gocd
+  - https://github.com/gocd/helm-chart/tree/gocd-2.16.1/gocd
 maintainers:
   - name: chadlwilson
     email: chad.lee.wilson@gmail.com
