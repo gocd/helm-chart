@@ -1,3 +1,5 @@
+### 2.16.1
+* [9e12e18](Use fully qualified names for image repositories)
 ### 2.16.0
 * Remove the docker-registry-artifact-plugin from the pre-installed plugins since it is little used, and as an artifact plugin must be bootstrapped to agents which imposes a start-up speed tax.
 * Bump kubernetes-elastic-agent plugin to latest patched version (thanks to @chadlwilson)
