@@ -1,3 +1,5 @@
+### 2.16.2
+* Bump pre-installed elastic agent plugin to latest patched version (thanks to @chadlwilson)
 ### 2.16.1
 * Use fully qualified names for image repositories for CRI-O 1.34 compatibility (thanks to @12345ieee)
 ### 2.16.0
