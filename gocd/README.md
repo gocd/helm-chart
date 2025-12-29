@@ -79,7 +79,7 @@ The following tables list the configurable parameters of the GoCD chart and thei
 | `server.preconfigureCommand`                 | Preconfigure GoCD Server with a custom command (shell,python, etc ...). Supported value is a list.                                                   | `["/bin/bash", "/preconfigure_server.sh"]` |
 | `server.preStop`                             | Perform cleanup and backup before stopping the gocd server. Supported value is a list.                                                               | `nil`                                      |
 | `server.terminationGracePeriodSeconds`       | Optional duration in seconds the gocd server pod needs to terminate gracefully.                                                                      | `nil`                                      |
-| `server.image.repository`                    | GoCD server image                                                                                                                                    | `gocd/gocd-server`                         |
+| `server.image.repository`                    | GoCD server image                                                                                                                                    | `docker.io/gocd/gocd-server`               |
 | `server.image.tag`                           | GoCD server image tag                                                                                                                                | `.Chart.appVersion`                        |
 | `server.image.pullPolicy`                    | Image pull policy                                                                                                                                    | `IfNotPresent`                             |
 | `server.image.pullSecrets`                   | Image pull secrets for private registries                                                                                                            | `[]`                                       |
@@ -189,7 +189,7 @@ $ kubectl create secret generic gocd-server-ssh \
 | `agent.postStart`                           | Commands to run after agent startup.                                                                                                                                                                                                                                                  | `nil`                   |
 | `agent.terminationGracePeriodSeconds`       | Optional duration in seconds the gocd agent pods need to terminate gracefully.                                                                                                                                                                                                        | `nil`                   |
 | `agent.deployStrategy`                      | GoCD Agent [`Deployment` strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) or [`StatefulSet`/`DaemonSet` updateStrategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) depending on `agent.kind`. | `{}`                    |
-| `agent.image.repository`                    | GoCD agent image                                                                                                                                                                                                                                                                      | `gocd/gocd-agent-wolfi` |
+| `agent.image.repository`                    | GoCD agent image                                                                                                                                                                                                                                                                      | `docker.io/gocd/gocd-agent-wolfi` |
 | `agent.image.tag`                           | GoCD agent image tag                                                                                                                                                                                                                                                                  | `.Chart.appVersion`     |
 | `agent.image.pullPolicy`                    | Image pull policy                                                                                                                                                                                                                                                                     | `IfNotPresent`          |
 | `agent.image.pullSecrets`                   | Image pull secrets for private registries                                                                                                                                                                                                                                             | `[]`                    |
@@ -486,12 +486,12 @@ Possible states:
 
 A basic [chart test](https://helm.sh/docs/topics/chart_tests/) is included in this chart. To avoid creating misleading or unused resources in your clusters, the resources required to use `helm test` are not created by default in chart version `1.39.6+` and must be enabled as below.
 
-| Parameter                | Description                                                                                               | Default                  |
-|--------------------------|-----------------------------------------------------------------------------------------------------------|--------------------------|
-| `tests.enabled`          | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                  |
-| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `bats/bats:tag`          |
-| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `chainguard/bash:latest` |
-| `tests.imagePullSecrets` | Image pull secrets for private registries                                                                 | `[]`                     |
+| Parameter                | Description                                                                                               | Default                            |
+|--------------------------|-----------------------------------------------------------------------------------------------------------|------------------------------------|
+| `tests.enabled`          | Enable creation of resources to support Helm chart tests with `helm test`.                                | `false`                            |
+| `tests.batsImage`        | Container image containing [BATS](https://github.com/bats-core/bats-core) binaries, required for testing. | `docker.io/bats/bats:tag`          |
+| `tests.curlImage`        | Container image that will run the tests; supplying curl, and able to run BATS.                            | `docker.io/chainguard/bash:latest` |
+| `tests.imagePullSecrets` | Image pull secrets for private registries                                                                 | `[]`                               |
 
 # Adding plugins
 
