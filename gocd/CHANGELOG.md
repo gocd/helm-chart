@@ -1,3 +1,5 @@
+### 2.17.0
+* [845c868](https://github.com/gocd/helm-chart/commit/845c868): Bump up GoCD Version to 25.4.0
 ### 2.16.2
 * Bump pre-installed elastic agent plugin to latest patched version (thanks to @chadlwilson)
 ### 2.16.1
