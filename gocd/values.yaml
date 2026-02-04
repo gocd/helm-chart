@@ -2,6 +2,129 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# =============================================================================
+# GLOBAL CONFIGURATION
+# =============================================================================
+global:
+  # ---------------------------------------------------------------------------
+  # PRIVATE CA CONFIGURATION
+  # Source: Kubernetes Secret (manual, ESO, Sealed Secrets, trust-manager)
+  # ---------------------------------------------------------------------------
+  privateCA:
+    # Enable private CA injection into all GoCD components
+    enabled: false
+
+    # Reference existing Secret containing CA bundle (PEM format)
+    existingSecret:
+      name: ""                          # e.g., "enterprise-ca-bundle"
+      key: "ca-bundle.crt"              # Key within secret
+
+    # Alternative: Reference ConfigMap (e.g., kube-root-ca.crt, trust-manager)
+    existingConfigMap:
+      name: ""                          # e.g., "kube-root-ca.crt"
+      key: "ca.crt"
+
+    # Java truststore generation
+    javaTruststore:
+      enabled: true
+      password: "changeit"
+      # Optional: Use pre-built truststore instead of generating
+      existingSecret: ""
+      existingSecretKey: "cacerts"
+
+    # Mount paths inside containers
+    mountPaths:
+      caBundlePEM: "/etc/ssl/certs/enterprise-ca-bundle.crt"
+      javaTruststore: "/etc/ssl/certs/java/cacerts"
+
+    # Environment variables for common tools
+    # Add custom environment variables here for additional build tools
+    # Examples for other tools:
+    #   MAVEN_OPTS: "-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts"
+    #   GRADLE_OPTS: "-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts"
+    #   GOFLAGS: "-insecure"  # or configure GOPROXY with internal proxy
+    #   PIP_CERT: "/etc/ssl/certs/enterprise-ca-bundle.crt"
+    #   CARGO_HTTP_CAINFO: "/etc/ssl/certs/enterprise-ca-bundle.crt"
+    #   BUNDLE_SSL_CA_CERT: "/etc/ssl/certs/enterprise-ca-bundle.crt"  # Ruby Bundler
+    environmentVariables:
+      # Git
+      GIT_SSL_CAINFO: "/etc/ssl/certs/enterprise-ca-bundle.crt"
+      # Python requests
+      REQUESTS_CA_BUNDLE: "/etc/ssl/certs/enterprise-ca-bundle.crt"
+      # Node.js
+      NODE_EXTRA_CA_CERTS: "/etc/ssl/certs/enterprise-ca-bundle.crt"
+      # Generic SSL (curl, wget, etc.)
+      SSL_CERT_FILE: "/etc/ssl/certs/enterprise-ca-bundle.crt"
+      CURL_CA_BUNDLE: "/etc/ssl/certs/enterprise-ca-bundle.crt"
+
+  # ---------------------------------------------------------------------------
+  # AIRGAP MODE CONFIGURATION
+  # ---------------------------------------------------------------------------
+  airgap:
+    enabled: false
+
+    # Override image registry for all images
+    imageRegistry: ""                   # e.g., "registry.internal.example.com"
+
+    # Image pull secrets (applied to all deployments)
+    imagePullSecrets: []
+    # - name: "enterprise-registry-pull-secret"
+
+    # -------------------------------------------------------------------------
+    # PLUGIN MIRROR (replaces GitHub downloads)
+    # -------------------------------------------------------------------------
+    pluginMirror:
+      enabled: false
+
+      # Base URL - plugins fetched from: {baseUrl}/{pluginFileName}
+      baseUrl: ""                       # e.g., "https://nexus.internal/repository/gocd-plugins"
+
+      # Authentication (optional)
+      auth:
+        enabled: false
+        existingSecret: ""              # Secret with username/password keys
+        usernameKey: "username"
+        passwordKey: "password"
+
+      # Plugins to download (filenames only)
+      plugins: []
+      # - "kubernetes-elastic-agent-5.0.1-738.jar"
+      # - "yaml-config-plugin-0.14.2.jar"
+
+      # Alternative: Load from PVC
+      existingPVC:
+        enabled: false
+        claimName: ""
+        subPath: "plugins"
+
+    # -------------------------------------------------------------------------
+    # GIT CONFIGURATION (URL rewrites + SSL)
+    # -------------------------------------------------------------------------
+    git:
+      # URL rewrite rules (git config url.X.insteadOf)
+      urlRewrites: []
+      # - original: "https://github.com/"
+      #   replacement: "https://gitlab.internal.example.com/mirror/"
+
+      # Additional .gitconfig content
+      extraConfig: ""
+
+  # ---------------------------------------------------------------------------
+  # ELASTIC AGENT CA INJECTION
+  # ---------------------------------------------------------------------------
+  elasticAgentCAInjection:
+    # Inject CA into Kubernetes elastic agent pods
+    enabled: false
+
+    # Use same CA as global.privateCA
+    useGlobalCA: true
+
+    # Init container image for truststore generation
+    initContainerImage: "eclipse-temurin:17-jdk"
+
+    # Inject environment variables into elastic agent containers
+    injectEnvironmentVariables: true
+
 rbac:
   # Specifies whether rbac resources must be created.
   create: true

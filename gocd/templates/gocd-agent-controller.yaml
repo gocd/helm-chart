@@ -60,9 +60,8 @@ spec:
         runAsGroup: {{ .Values.agent.securityContext.runAsGroup }}
         fsGroup: {{ .Values.agent.securityContext.fsGroup }}
         fsGroupChangePolicy: {{ .Values.agent.securityContext.fsGroupChangePolicy }}
-      {{- if or .Values.agent.persistence.enabled (or .Values.agent.security.ssh.enabled .Values.agent.persistence.extraVolumes) }}
+      {{- if or .Values.agent.persistence.enabled (or .Values.agent.security.ssh.enabled (or .Values.agent.persistence.extraVolumes (eq (include "gocd.privateCA.enabled" .) "true"))) }}
       volumes:
-      {{- end }}
       {{- if .Values.agent.persistence.enabled }}
         - name: goagent-vol
           persistentVolumeClaim:
@@ -77,12 +76,34 @@ spec:
             secretName: {{ .Values.agent.security.ssh.secretName }}
             defaultMode: {{ .Values.agent.security.ssh.defaultMode | default 256 }}
       {{- end }}
-      {{- if .Values.agent.image.pullSecrets }}
-      imagePullSecrets: {{ .Values.agent.image.pullSecrets | toYaml | nindent 8 }}
+      {{- if eq (include "gocd.privateCA.enabled" .) "true" }}
+        {{- include "gocd.privateCA.volume" . | nindent 8 }}
       {{- end }}
-      {{- if .Values.agent.initContainers }}
+      {{- if or (eq (include "gocd.privateCA.enabled" .) "true") (and .Values.global.airgap.enabled .Values.global.airgap.git.urlRewrites) }}
+        - name: gitconfig
+          configMap:
+            name: {{ template "gocd.fullname" . }}-gitconfig
+      {{- end }}
+      {{- end }}
+      {{- if or .Values.agent.image.pullSecrets .Values.global.airgap.imagePullSecrets }}
+      imagePullSecrets:
+      {{- if .Values.agent.image.pullSecrets }}
+{{ .Values.agent.image.pullSecrets | toYaml | indent 8 }}
+      {{- end }}
+      {{- if .Values.global.airgap.imagePullSecrets }}
+{{ .Values.global.airgap.imagePullSecrets | toYaml | indent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if or .Values.agent.initContainers (eq (include "gocd.privateCA.enabled" .) "true") }}
       initContainers:
-{{ toYaml .Values.agent.initContainers | indent 8 }}
+        {{- if eq (include "gocd.privateCA.enabled" .) "true" }}
+        {{- if .Values.global.privateCA.javaTruststore.enabled }}
+        {{- include "gocd.privateCA.truststoreInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.agent.initContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: {{ template "gocd.name" . }}-agent
@@ -130,6 +151,9 @@ spec:
             - name: AGENT_BOOTSTRAPPER_ARGS
               value: {{ .Values.agent.env.goAgentBootstrapperArgs }}
             {{- end }}
+            {{- if eq (include "gocd.privateCA.enabled" .) "true" }}
+            {{- include "gocd.privateCA.envVars" . | nindent 12 }}
+            {{- end }}
             {{- if .Values.agent.env.extraEnvVars }}
 {{ toYaml .Values.agent.env.extraEnvVars | indent 12 }}
             {{- end }}
@@ -165,6 +189,15 @@ spec:
             - name: ssh-secrets
               readOnly: true
               mountPath: /home/go/.ssh
+          {{- end }}
+          {{- if eq (include "gocd.privateCA.enabled" .) "true" }}
+            {{- include "gocd.privateCA.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          {{- if or (eq (include "gocd.privateCA.enabled" .) "true") (and .Values.global.airgap.enabled .Values.global.airgap.git.urlRewrites) }}
+            - name: gitconfig
+              mountPath: /home/go/.gitconfig
+              subPath: .gitconfig
+              readOnly: true
           {{- end }}
           {{- if or .Values.agent.preStop .Values.agent.postStart }}
           lifecycle:

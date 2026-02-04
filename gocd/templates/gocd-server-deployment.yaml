@@ -46,9 +46,8 @@ spec:
         fsGroupChangePolicy: {{ .Values.server.securityContext.fsGroupChangePolicy }}
       serviceAccountName: {{ template "gocd.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
-      {{- if or .Values.server.shouldPreconfigure (or .Values.server.persistence.enabled (or .Values.server.security.ssh.enabled .Values.server.persistence.extraVolumes)) }}
+      {{- if or .Values.server.shouldPreconfigure (or .Values.server.persistence.enabled (or .Values.server.security.ssh.enabled (or .Values.server.persistence.extraVolumes (eq (include "gocd.privateCA.enabled" .) "true")))) }}
       volumes:
-      {{- end }}
       {{- if .Values.server.shouldPreconfigure }}
         - name: config-vol
           configMap:
@@ -68,12 +67,40 @@ spec:
             secretName: {{ .Values.server.security.ssh.secretName }}
             defaultMode: {{ .Values.server.security.ssh.defaultMode | default 256 }}
       {{- end }}
-      {{- if .Values.server.image.pullSecrets }}
-      imagePullSecrets: {{ .Values.server.image.pullSecrets | toYaml | nindent 8 }}
+      {{- if eq (include "gocd.privateCA.enabled" .) "true" }}
+        {{- include "gocd.privateCA.volume" . | nindent 8 }}
       {{- end }}
-      {{- if .Values.server.initContainers }}
+      {{- if and .Values.global.airgap.pluginMirror.auth.enabled .Values.global.airgap.pluginMirror.auth.existingSecret }}
+        - name: plugin-mirror-auth
+          secret:
+            secretName: {{ .Values.global.airgap.pluginMirror.auth.existingSecret }}
+      {{- end }}
+      {{- if or (eq (include "gocd.privateCA.enabled" .) "true") (and .Values.global.airgap.enabled .Values.global.airgap.git.urlRewrites) }}
+        - name: gitconfig
+          configMap:
+            name: {{ template "gocd.fullname" . }}-gitconfig
+      {{- end }}
+      {{- end }}
+      {{- if or .Values.server.image.pullSecrets .Values.global.airgap.imagePullSecrets }}
+      imagePullSecrets:
+      {{- if .Values.server.image.pullSecrets }}
+{{ .Values.server.image.pullSecrets | toYaml | indent 8 }}
+      {{- end }}
+      {{- if .Values.global.airgap.imagePullSecrets }}
+{{ .Values.global.airgap.imagePullSecrets | toYaml | indent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if or .Values.server.initContainers (eq (include "gocd.privateCA.enabled" .) "true") (and .Values.global.airgap.enabled .Values.global.airgap.pluginMirror.enabled) }}
       initContainers:
-{{ toYaml .Values.server.initContainers | indent 8 }}
+        {{- if eq (include "gocd.privateCA.enabled" .) "true" }}
+        {{- if .Values.global.privateCA.javaTruststore.enabled }}
+        {{- include "gocd.privateCA.truststoreInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- include "gocd.airgap.pluginDownloadInitContainer" . | nindent 8 }}
+        {{- with .Values.server.initContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
       {{- if .Values.server.sidecarContainers }}
@@ -90,6 +117,9 @@ spec:
             {{- if .Values.server.env.goServerJvmOpts }}
             - name: GOCD_SERVER_JVM_OPTS
               value: {{ .Values.server.env.goServerJvmOpts }}
+            {{- end }}
+            {{- if eq (include "gocd.privateCA.enabled" .) "true" }}
+            {{- include "gocd.privateCA.envVars" . | nindent 12 }}
             {{- end }}
             {{- if .Values.server.env.extraEnvVars }}
 {{ toYaml .Values.server.env.extraEnvVars | indent 12 }}
@@ -136,6 +166,15 @@ spec:
             - name: ssh-secrets
               readOnly: true
               mountPath: /home/go/.ssh
+          {{- end }}
+          {{- if eq (include "gocd.privateCA.enabled" .) "true" }}
+            {{- include "gocd.privateCA.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          {{- if or (eq (include "gocd.privateCA.enabled" .) "true") (and .Values.global.airgap.enabled .Values.global.airgap.git.urlRewrites) }}
+            - name: gitconfig
+              mountPath: /home/go/.gitconfig
+              subPath: .gitconfig
+              readOnly: true
           {{- end }}
           {{- if or .Values.server.shouldPreconfigure .Values.server.preStop }}
           lifecycle:

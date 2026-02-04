@@ -1,0 +1,11 @@
+{{- if or (eq (include "gocd.privateCA.enabled" .) "true") (and .Values.global.airgap.enabled .Values.global.airgap.git.urlRewrites) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "gocd.fullname" . }}-gitconfig
+  labels:
+    {{- include "gocd.labels" . | nindent 4 }}
+data:
+  .gitconfig: |
+    {{- include "gocd.gitconfig.content" . | nindent 4 }}
+{{- end }}

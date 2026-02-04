@@ -1,0 +1,90 @@
+{{- if and .Values.global.elasticAgentCAInjection.enabled (eq (include "gocd.privateCA.enabled" .) "true") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "gocd.fullname" . }}-elastic-agent-pod-template
+  labels:
+    {{- include "gocd.labels" . | nindent 4 }}
+  annotations:
+    description: "Default pod template for Kubernetes Elastic Agents with CA injection"
+data:
+  pod-template.yaml: |
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: {{ `"gocd-agent-{{ POD_POSTFIX }}"` }}
+      labels:
+        app: gocd
+        component: agent
+        type: elastic
+    spec:
+      serviceAccountName: {{ template "gocd.agentServiceAccountName" . }}
+
+      {{- if .Values.global.airgap.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.airgap.imagePullSecrets | nindent 8 }}
+      {{- end }}
+
+      volumes:
+        - name: enterprise-ca-bundle
+          secret:
+            secretName: {{ .Values.global.privateCA.existingSecret.name }}
+            items:
+              - key: {{ .Values.global.privateCA.existingSecret.key | default "ca-bundle.crt" }}
+                path: ca-bundle.crt
+        - name: java-truststore
+          emptyDir: {}
+        {{- if or (eq (include "gocd.privateCA.enabled" .) "true") (and .Values.global.airgap.enabled .Values.global.airgap.git.urlRewrites) }}
+        - name: gitconfig
+          configMap:
+            name: {{ template "gocd.fullname" . }}-gitconfig
+        {{- end }}
+
+      initContainers:
+        - name: generate-truststore
+          image: {{ if .Values.global.airgap.imageRegistry }}{{ .Values.global.airgap.imageRegistry }}/{{ end }}{{ .Values.global.elasticAgentCAInjection.initContainerImage | default "eclipse-temurin:17-jdk" }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              cp $JAVA_HOME/lib/security/cacerts /truststore/cacerts
+              chmod 644 /truststore/cacerts
+              keytool -importcert -noprompt \
+                -keystore /truststore/cacerts \
+                -storepass {{ .Values.global.privateCA.javaTruststore.password | default "changeit" }} \
+                -alias enterprise-root-ca \
+                -file /ca-source/ca-bundle.crt
+          volumeMounts:
+            - name: enterprise-ca-bundle
+              mountPath: /ca-source
+              readOnly: true
+            - name: java-truststore
+              mountPath: /truststore
+
+      containers:
+        - name: {{ `"gocd-agent-{{ CONTAINER_POSTFIX }}"` }}
+          image: {{ if .Values.global.airgap.imageRegistry }}{{ .Values.global.airgap.imageRegistry }}/{{ end }}{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.agent.securityContext | nindent 12 }}
+          env:
+            {{- if .Values.global.elasticAgentCAInjection.injectEnvironmentVariables }}
+            {{- include "gocd.privateCA.envVars" . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: enterprise-ca-bundle
+              mountPath: {{ .Values.global.privateCA.mountPaths.caBundlePEM | default "/etc/ssl/certs/enterprise-ca-bundle.crt" }}
+              subPath: ca-bundle.crt
+              readOnly: true
+            - name: java-truststore
+              mountPath: {{ .Values.global.privateCA.mountPaths.javaTruststore | default "/etc/ssl/certs/java/cacerts" }}
+              subPath: cacerts
+              readOnly: true
+            {{- if or (eq (include "gocd.privateCA.enabled" .) "true") (and .Values.global.airgap.enabled .Values.global.airgap.git.urlRewrites) }}
+            - name: gitconfig
+              mountPath: /home/go/.gitconfig
+              subPath: .gitconfig
+              readOnly: true
+            {{- end }}
+{{- end }}
