@@ -1,3 +1,21 @@
+### 2.18.0
+* Add comprehensive airgap deployment support with private CA certificate injection
+  * New `global.privateCA` configuration for enterprise private CA bundle injection from Kubernetes Secrets
+  * Automatic Java truststore generation via init containers using `keytool`
+  * Environment variable injection for common build tools (Git, Maven, Gradle, Python, Node.js, Ruby, curl, etc.)
+  * Configurable environment variables for custom tool support
+  * Support for External Secrets Operator (ESO), Sealed Secrets, and trust-manager
+* Add airgap mode with plugin mirror support
+  * New `global.airgap.pluginMirror` configuration for internal plugin repositories (Nexus, Artifactory, etc.)
+  * Git URL rewrite rules via `global.airgap.git.urlRewrites` for redirecting to internal mirrors
+  * Automatic `.gitconfig` generation with SSL CA and URL rewrites
+  * Image pull secret support via `global.airgap.imagePullSecrets`
+* Add Kubernetes Elastic Agent CA propagation
+  * New `global.elasticAgentCAInjection` for automatic CA injection into elastic agent pods
+  * ConfigMap-based pod template with pre-configured CA trust and environment variables
+  * Zero-configuration CA trust for dynamically created elastic agents
+* All new features disabled by default, maintaining 100% backward compatibility
+* Fixes volumeMounts rendering issue when privateCA is enabled but persistence is disabled
 ### 2.17.1
 * Bump pre-installed elastic agent plugin to latest patched version (thanks to @chadlwilson)
 ### 2.17.0

@@ -508,6 +508,348 @@ env:
 
 - If you are adding a plugin to an existing Go server, it will result in a new Go server pod being created that has the plugin installed and running.
 
+# Airgap Deployment & Enterprise Private CA Support
+
+GoCD can be deployed in airgapped (disconnected) Kubernetes environments with zero internet access. This chart provides comprehensive support for:
+
+- **Private Certificate Authority (CA) injection** - Trust enterprise/internal CAs for HTTPS connections
+- **Plugin mirror configuration** - Download plugins from internal artifact repositories instead of GitHub
+- **Git URL rewrites** - Redirect Git operations to internal mirrors (GitLab, Gitea, etc.)
+- **Kubernetes Elastic Agent CA propagation** - Automatically inject CA trust into dynamically created elastic agent pods
+
+All features are disabled by default and opt-in for backward compatibility.
+
+## Private CA Configuration
+
+### Prerequisites
+
+Create a Kubernetes Secret containing your enterprise CA bundle:
+
+```bash
+# From a CA certificate file
+kubectl create secret generic enterprise-ca-bundle \
+  --namespace gocd \
+  --from-file=ca-bundle.crt=/path/to/your/ca-bundle.crt
+
+# From multiple CA certificates (concatenated)
+cat root-ca.crt intermediate-ca.crt > ca-bundle.crt
+kubectl create secret generic enterprise-ca-bundle \
+  --namespace gocd \
+  --from-file=ca-bundle.crt=ca-bundle.crt
+```
+
+### Basic Configuration
+
+Enable CA injection by referencing the Secret:
+
+```yaml
+global:
+  privateCA:
+    enabled: true
+    existingSecret:
+      name: "enterprise-ca-bundle"
+      key: "ca-bundle.crt"
+    javaTruststore:
+      enabled: true  # Automatically generate Java truststore
+```
+
+This configuration:
+- Mounts the CA bundle at `/etc/ssl/certs/enterprise-ca-bundle.crt` in all pods
+- Generates a Java truststore with the CA certificate via an init container
+- Injects environment variables for common build tools
+
+### Environment Variables
+
+The following environment variables are automatically configured:
+
+| Variable | Purpose | Default Value |
+|----------|---------|---------------|
+| `GIT_SSL_CAINFO` | Git SSL CA certificate path | `/etc/ssl/certs/enterprise-ca-bundle.crt` |
+| `SSL_CERT_FILE` | Generic SSL certificate file | `/etc/ssl/certs/enterprise-ca-bundle.crt` |
+| `CURL_CA_BUNDLE` | curl CA bundle | `/etc/ssl/certs/enterprise-ca-bundle.crt` |
+| `REQUESTS_CA_BUNDLE` | Python requests CA bundle | `/etc/ssl/certs/enterprise-ca-bundle.crt` |
+| `NODE_EXTRA_CA_CERTS` | Node.js extra CA certificates | `/etc/ssl/certs/enterprise-ca-bundle.crt` |
+| `JAVA_TOOL_OPTIONS` | Java truststore configuration | `-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts` |
+
+### Custom Environment Variables
+
+Add custom environment variables for additional build tools:
+
+```yaml
+global:
+  privateCA:
+    enabled: true
+    existingSecret:
+      name: "enterprise-ca-bundle"
+      key: "ca-bundle.crt"
+    javaTruststore:
+      enabled: true
+    environmentVariables:
+      # Override defaults or add custom variables
+      MAVEN_OPTS: "-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Dmaven.wagon.http.ssl.insecure=false"
+      GRADLE_OPTS: "-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts"
+      CARGO_HTTP_CAINFO: "/etc/ssl/certs/enterprise-ca-bundle.crt"  # Rust
+      GOPATH: "/home/go/go"
+      GOCACHE: "/home/go/.cache/go-build"
+```
+
+### Integration with External Secrets Operator
+
+Use External Secrets Operator (ESO) to sync CA certificates from external secret stores:
+
+```yaml
+# Create ExternalSecret to sync from Vault/AWS Secrets Manager
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: enterprise-ca-external
+  namespace: gocd
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: SecretStore
+  target:
+    name: enterprise-ca-bundle
+    creationPolicy: Owner
+  data:
+    - secretKey: ca-bundle.crt
+      remoteRef:
+        key: pki/ca-bundle
+        property: certificate
+
+---
+# Configure GoCD to use the synced Secret
+global:
+  privateCA:
+    enabled: true
+    existingSecret:
+      name: "enterprise-ca-bundle"
+      key: "ca-bundle.crt"
+```
+
+## Airgap Mode Configuration
+
+### Plugin Mirror
+
+Configure GoCD to download plugins from an internal artifact repository instead of GitHub:
+
+```yaml
+global:
+  airgap:
+    enabled: true
+    pluginMirror:
+      enabled: true
+      baseUrl: "https://nexus.internal.company.com/repository/gocd-plugins"
+      auth:
+        enabled: true
+        existingSecret: "nexus-credentials"  # Secret with username/password keys
+      plugins:
+        - name: "kubernetes-elastic-agents"
+          version: "v4.1.0-541"
+          filename: "kubernetes-elastic-agent-v4.1.0-541.jar"
+        - name: "docker-registry-artifact-plugin"
+          version: "v1.4.0-158"
+          filename: "docker-registry-artifact-plugin-1.4.0-158.jar"
+```
+
+Plugin download URL format: `{baseUrl}/{name}/{filename}`
+
+### Git URL Rewrites
+
+Redirect Git clone/fetch operations to internal Git mirrors:
+
+```yaml
+global:
+  airgap:
+    enabled: true
+    git:
+      urlRewrites:
+        # Redirect all github.com to internal GitLab mirror
+        - original: "https://github.com/"
+          replacement: "https://gitlab.internal.company.com/mirror/"
+
+        # Redirect specific organizations
+        - original: "https://github.com/gocd/"
+          replacement: "https://gitlab.internal.company.com/gocd-mirror/"
+
+        # Support SSH rewrites
+        - original: "git@github.com:"
+          replacement: "git@gitlab.internal.company.com:mirror/"
+```
+
+This generates a `.gitconfig` file mounted at `/home/go/.gitconfig`:
+
+```ini
+[http]
+    sslCAInfo = /etc/ssl/certs/enterprise-ca-bundle.crt
+    sslVerify = true
+[url "https://gitlab.internal.company.com/mirror/"]
+    insteadOf = https://github.com/
+```
+
+### Image Pull Secrets
+
+Configure private registry authentication for airgap deployments:
+
+```yaml
+global:
+  airgap:
+    imageRegistry: "harbor.internal.company.com/gocd"
+    imagePullSecrets:
+      - name: "harbor-registry-secret"
+```
+
+Create the image pull secret:
+
+```bash
+kubectl create secret docker-registry harbor-registry-secret \
+  --namespace gocd \
+  --docker-server=harbor.internal.company.com \
+  --docker-username=robot-account \
+  --docker-password=<password> \
+  --docker-email=devops@company.com
+```
+
+## Kubernetes Elastic Agent CA Injection
+
+Automatically inject CA trust into Kubernetes Elastic Agent pods:
+
+```yaml
+global:
+  privateCA:
+    enabled: true
+    existingSecret:
+      name: "enterprise-ca-bundle"
+      key: "ca-bundle.crt"
+
+  elasticAgentCAInjection:
+    enabled: true
+    useGlobalCA: true  # Use the same CA as server/agents
+```
+
+This creates a ConfigMap (`{release-name}-elastic-agent-pod-template`) containing a pod template with:
+- CA bundle volume and mount
+- Java truststore init container
+- All environment variables pre-configured
+
+Reference this template in your Kubernetes Elastic Agent plugin configuration in the GoCD UI.
+
+## Complete Airgap Example
+
+Full configuration for a production airgap deployment:
+
+```yaml
+global:
+  # Private CA configuration
+  privateCA:
+    enabled: true
+    existingSecret:
+      name: "enterprise-ca-bundle"
+      key: "ca-bundle.crt"
+    javaTruststore:
+      enabled: true
+    environmentVariables:
+      MAVEN_OPTS: "-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts"
+      GRADLE_OPTS: "-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts"
+
+  # Airgap configuration
+  airgap:
+    enabled: true
+    imageRegistry: "harbor.internal.company.com/gocd"
+    imagePullSecrets:
+      - name: "harbor-registry"
+    pluginMirror:
+      enabled: true
+      baseUrl: "https://nexus.internal.company.com/repository/gocd-plugins"
+      auth:
+        enabled: true
+        existingSecret: "nexus-auth"
+      plugins:
+        - name: "kubernetes-elastic-agents"
+          version: "v4.1.0-541"
+          filename: "kubernetes-elastic-agent-v4.1.0-541.jar"
+    git:
+      urlRewrites:
+        - original: "https://github.com/"
+          replacement: "https://gitlab.internal.company.com/mirror/"
+
+  # Elastic agent CA injection
+  elasticAgentCAInjection:
+    enabled: true
+    useGlobalCA: true
+
+server:
+  enabled: true
+  shouldPreconfigure: true
+  image:
+    repository: harbor.internal.company.com/gocd/gocd-server
+    tag: v25.4.0
+  persistence:
+    enabled: true
+    size: 10Gi
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - gocd.internal.company.com
+
+agent:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: harbor.internal.company.com/gocd/gocd-agent-wolfi
+    tag: v25.4.0
+```
+
+## Troubleshooting Airgap Deployments
+
+### Verify CA Bundle Mounting
+
+```bash
+# Check server pod
+kubectl exec -n gocd <server-pod-name> -- ls -la /etc/ssl/certs/enterprise-ca-bundle.crt
+
+# Check agent pod
+kubectl exec -n gocd <agent-pod-name> -- ls -la /etc/ssl/certs/enterprise-ca-bundle.crt
+```
+
+### Verify Java Truststore
+
+```bash
+# List certificates in truststore
+kubectl exec -n gocd <pod-name> -- \
+  keytool -list -keystore /etc/ssl/certs/java/cacerts -storepass changeit | grep enterprise
+```
+
+### Verify Environment Variables
+
+```bash
+# Check all SSL-related environment variables
+kubectl exec -n gocd <pod-name> -- env | grep -E "(SSL|GIT|MAVEN|JAVA_TOOL)"
+```
+
+### Check Init Container Logs
+
+```bash
+# View truststore generation logs
+kubectl logs -n gocd <pod-name> -c generate-truststore
+
+# View plugin download logs (if enabled)
+kubectl logs -n gocd <server-pod-name> -c download-plugins
+```
+
+### Test Connectivity from Pods
+
+```bash
+# Test HTTPS connectivity to internal services
+kubectl exec -n gocd <pod-name> -- curl -v https://gitlab.internal.company.com
+
+# Test Git clone with CA trust
+kubectl exec -n gocd <agent-pod-name> -- \
+  git clone https://gitlab.internal.company.com/mirror/sample-repo.git /tmp/test
+```
+
 # Ingress
 
 On a Kubernetes cluster, ingress is responsible for accepting incoming requests and forwarding them to the appropriate service in the backend.
