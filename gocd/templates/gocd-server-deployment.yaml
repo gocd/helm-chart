@@ -140,7 +140,7 @@ spec:
             initialDelaySeconds: {{ .Values.server.healthCheck.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.healthCheck.periodSeconds }}
             failureThreshold: {{ .Values.server.healthCheck.failureThreshold }}
-          {{- if or .Values.server.shouldPreconfigure (or .Values.server.persistence.enabled (or .Values.server.security.ssh.enabled .Values.server.persistence.extraVolumeMounts)) }}
+          {{- if or .Values.server.shouldPreconfigure (or .Values.server.persistence.enabled (or .Values.server.security.ssh.enabled (or .Values.server.persistence.extraVolumeMounts (eq (include "gocd.privateCA.enabled" .) "true")))) }}
           volumeMounts:
           {{- end }}
           {{- if .Values.server.shouldPreconfigure }}

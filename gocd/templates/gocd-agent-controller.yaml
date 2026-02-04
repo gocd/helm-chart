@@ -171,7 +171,7 @@ spec:
               port: 8152
             initialDelaySeconds: {{ .Values.agent.healthCheck.initialDelaySeconds }}
           {{- end }}
-          {{- if or .Values.agent.persistence.enabled (or .Values.agent.security.ssh.enabled .Values.agent.persistence.extraVolumeMounts) }}
+          {{- if or .Values.agent.persistence.enabled (or .Values.agent.security.ssh.enabled (or .Values.agent.persistence.extraVolumeMounts (eq (include "gocd.privateCA.enabled" .) "true"))) }}
           volumeMounts:
           {{- end }}
           {{- if .Values.agent.persistence.enabled }}
