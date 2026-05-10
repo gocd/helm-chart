@@ -1,3 +1,5 @@
+### 2.17.2
+* Bump pre-installed elastic agent plugin to latest patched version (thanks to @chadlwilson)
 ### 2.17.1
 * Bump pre-installed elastic agent plugin to latest patched version (thanks to @chadlwilson)
 ### 2.17.0
