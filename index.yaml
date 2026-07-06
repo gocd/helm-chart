@@ -5,6 +5,49 @@ entries:
       artifacthub.io/category: integration-delivery
       artifacthub.io/images: |
         - name: gocd-server
+          image: docker.io/gocd/gocd-server:26.1.0
+          platforms:
+            - linux/amd64
+            - linux/arm64
+        - name: gocd-agent-wolfi (optional)
+          image: docker.io/gocd/gocd-agent-wolfi:26.1.0
+          platforms:
+            - linux/amd64
+            - linux/arm64
+      artifacthub.io/license: Apache-2.0
+    apiVersion: v1
+    appVersion: 26.1.0
+    created: "2026-07-06T17:19:59.071695359Z"
+    description: GoCD is an open-source continuous delivery server to model and visualize
+      complex workflows with ease.
+    digest: ea485eba8a169e1ba2650beeee7737a322f6004e323c336ec9fe3ddf1c42e345
+    home: https://www.gocd.org/
+    icon: https://gocd.github.io/assets/images/go-icon-black-192x192.png
+    keywords:
+    - gocd
+    - ci
+    - cd
+    - ci/cd
+    - continuous-integration
+    - continuous-delivery
+    - continuous-deployment
+    - continuous-testing
+    maintainers:
+    - email: chad.lee.wilson@gmail.com
+      name: chadlwilson
+    - email: arvind@thoughtworks.com
+      name: arvindsv
+    name: gocd
+    sources:
+    - https://github.com/gocd/gocd/tree/26.1.0
+    - https://github.com/gocd/helm-chart/tree/gocd-2.18.0/gocd
+    urls:
+    - https://github.com/gocd/helm-chart/releases/download/gocd-2.18.0/gocd-2.18.0.tgz
+    version: 2.18.0
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/images: |
+        - name: gocd-server
           image: docker.io/gocd/gocd-server:25.4.0
           platforms:
             - linux/amd64
@@ -5483,4 +5526,4 @@ entries:
     urls:
     - https://github.com/gocd/helm-chart/releases/download/1.0.0/gocd-1.0.0.tgz
     version: 1.0.0
-generated: "2026-05-10T15:50:18.99366554Z"
+generated: "2026-07-06T17:19:59.072365545Z"
