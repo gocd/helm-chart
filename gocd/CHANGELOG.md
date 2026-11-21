@@ -1,3 +1,5 @@
+### 2.19.0
+* [faf7f50](https://github.com/gocd/helm-chart/commit/faf7f50): Bump up GoCD Version to 26.2.0
 ### 2.18.1
 * Bump pre-installed elastic agent plugin to latest patched version (thanks to @chadlwilson)
 ### 2.18.0
